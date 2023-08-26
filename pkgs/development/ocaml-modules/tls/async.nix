@@ -5,7 +5,7 @@ buildDunePackage rec {
 
   inherit (tls) src meta version;
 
-  minimalOCamlVersion = "4.11";
+  minimalOCamlVersion = "4.14";
   duneVersion = "3";
 
   doCheck = true;
