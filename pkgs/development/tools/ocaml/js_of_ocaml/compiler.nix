@@ -1,16 +1,23 @@
-{ lib, fetchurl, buildDunePackage
-, cmdliner, yojson, ppxlib, findlib
-, menhir, menhirLib, sedlex
+{ lib
+, fetchurl
+, buildDunePackage
+, cmdliner
+, yojson
+, ppxlib
+, findlib
+, menhir
+, menhirLib
+, sedlex
 }:
 
 buildDunePackage rec {
   pname = "js_of_ocaml-compiler";
-  version = "5.8.2";
+  version = "5.7.0";
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml/releases/download/${version}/js_of_ocaml-${version}.tbz";
-    hash = "sha256-ciAZS9L5sU2VgVOlogZ1A1nXtJ3hL+iNdFDThc7L8Eo=";
+    hash = "sha256-zfHeoNk5ekmLYwq+gBSQi23YOxDuDH/1d3pkQ6Ypg74=";
   };
 
   nativeBuildInputs = [ menhir ];
