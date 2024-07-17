@@ -279,6 +279,13 @@ with self;
     doCheck = false;
   };
 
+  codicons = janePackage {
+    pname = "codicons";
+    hash = "sha256-S4VrMObA5+SNeL/XsWU6SoSD/0TVvuqHjthUaQCDoRU=";
+    meta.description = "Icons from VS code";
+    propagatedBuildInputs = [ core ppx_jane virtual_dom ];
+  };
+
   cohttp_async_websocket = janePackage {
     pname = "cohttp_async_websocket";
     hash = "sha256-0InGCF34LWQes9S4OgbR6w+6cylThYuj1Dj0aQyTnuY=";
@@ -622,6 +629,14 @@ with self;
     buildInputs = [ dune-configurator ocaml_intrinsics_kernel ];
   };
 
+  ocaml_openapi_generator = janePackage {
+    pname = "ocaml_openapi_generator";
+    hash = "sha256-HCq9fylcVjBMs8L6E860nw+EonWEQadlyEKpQI6mynU=";
+    meta.description = " An OpenAPI 3 to OCaml client generator";
+    buildInputs = [ async core core_kernel core_unix jsonaf ppx_jane ppx_jsonaf_conv httpaf jingoo uri ];
+    nativeBuildInputs = [ ocaml-embed-file ];
+  };
+
   of_json = janePackage {
     pname = "of_json";
     hash = "sha256-pZCiwXRwZK6ohsGz/WLacgo48ekdT35uD4VESvGxH8A=";
@@ -785,6 +800,13 @@ with self;
     hash = "sha256-KHWIufXU+k6xCLf8l50Pp/1JZ2wFrKnKT/aQYpadlmU=";
     meta.description = "Expands [@disable_unused_warnings] into [@warning \"-20-26-32-33-34-35-36-37-38-39-60-66-67\"]";
     propagatedBuildInputs = [ ppxlib ];
+  };
+
+  ppx_embed_file = janePackage {
+    pname = "ppx_embed_file";
+    hash = "sha256-Ew6/X7oAq81ldERU37QWXQdgReEtPD/lxbku8WZNJ6A=";
+    meta.description = "A PPX that allows embedding files directly into executables/libraries as strings or bytes";
+    propagatedBuildInputs = [ core ppx_jane shell ppxlib ];
   };
 
   ppx_enumerate = janePackage {
@@ -1311,6 +1333,13 @@ with self;
     meta.description = "OCaml bindings for the virtual-dom library";
     buildInputs = [ js_of_ocaml-ppx ];
     propagatedBuildInputs = [ base64 core_kernel gen_js_api js_of_ocaml js_of_ocaml_patches lambdasoup tyxml uri ];
+  };
+
+  virtual_dom_toplayer = janePackage {
+    pname = "virtual_dom_toplayer";
+    hash = "sha256-trTSWzWsXkV4RtQvVCyXqJN5/wftaFuooaehNekP9H0=";
+    meta.description = "OCaml bindings for the floating positioning library for 'toplevel' virtual dom components";
+    propagatedBuildInputs = [ core js_of_ocaml_patches ppx_css ppx_jane virtual_dom gen_js_api js_of_ocaml js_of_ocaml-ppx ];
   };
 
   zarith_stubs_js = janePackage {
