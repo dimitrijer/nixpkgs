@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, base, fmt
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, base
+, fmt
 }:
 
 buildDunePackage rec {
@@ -16,6 +19,9 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ base fmt ];
+
+  # base v0.17 compatibility
+  patches = [ ./genspio.patch ];
 
   doCheck = true;
 
