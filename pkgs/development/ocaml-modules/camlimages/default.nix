@@ -1,5 +1,12 @@
-{ lib, fetchFromGitLab, buildDunePackage, findlib, dune-configurator, cppo
-, graphics, lablgtk, stdio
+{ lib
+, fetchFromGitLab
+, buildDunePackage
+, findlib
+, dune-configurator
+, cppo
+, graphics
+, lablgtk
+, stdio
 }:
 
 buildDunePackage rec {
@@ -15,9 +22,8 @@ buildDunePackage rec {
     sha256 = "1m2c76ghisg73dikz2ifdkrbkgiwa0hcmp21f2fm2rkbf02rq3f4";
   };
 
-  postPatch = ''
-    substituteInPlace core/{images,units}.ml --replace String.lowercase String.lowercase_ascii
-  '';
+  # stdio v0.17 compatibility; also replaces `String.lowercase` with `String.lowercase_ascii`
+  patches = [ ./camlimages.patch ];
 
   nativeBuildInputs = [ cppo ];
   buildInputs = [ dune-configurator findlib graphics lablgtk stdio ];
