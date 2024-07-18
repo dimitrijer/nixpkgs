@@ -1,9 +1,15 @@
-{ lib, buildDunePackage, fetchFromGitHub, ppx_cstruct, rresult, cstruct-unix
-, core_kernel }:
+{ lib
+, buildDunePackage
+, fetchFromGitHub
+, ppx_cstruct
+, rresult
+, cstruct-unix
+, core_kernel
+}:
 
 buildDunePackage rec {
   pname = "dbf";
-  version = "0.1.1";
+  version = "0.2.0";
 
   minimalOCamlVersion = "4.08";
 
@@ -12,8 +18,8 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "pveber";
     repo = "dbf";
-    rev = version;
-    hash = "sha256-h1K5YDLbXGEJi/quKXvSR0gZ+WkBzut7AsVFv+Bm8/g=";
+    rev = "v${version}";
+    hash = "sha256-096GodM3J/4dsVdylG+6xz/p6ogUkhDGdFjiPwl/jLQ=";
   };
 
   buildInputs = [ ppx_cstruct ];
