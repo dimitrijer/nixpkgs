@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub, nix-update-script
+{ lib
+, fetchFromGitHub
+, nix-update-script
 , buildDunePackage
-, core
+, base
+, ppx_sexp_conv
 }:
 
 buildDunePackage rec {
@@ -16,9 +19,10 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.08";
 
-  propagatedBuildInputs = [
-    core
-  ];
+  propagatedBuildInputs = [ base ppx_sexp_conv ];
+
+  # base v0.17 compatibility
+  patches = [ ./tdigest.patch ];
 
   passthru.updateScript = nix-update-script { };
 
