@@ -1,13 +1,6 @@
-{ lib
-, fetchurl
-, buildDunePackage
-, cmdliner
-, yojson
-, ppxlib
-, findlib
-, menhir
-, menhirLib
-, sedlex
+{ lib, fetchurl, buildDunePackage
+, cmdliner, yojson, ppxlib, findlib
+, menhir, menhirLib, sedlex
 }:
 
 buildDunePackage rec {

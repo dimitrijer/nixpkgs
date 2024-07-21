@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "biocaml";
     repo   = pname;
     rev    = version;
-    hash  = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
+    hash = "sha256-iSg0QsTcU0MT/Cletl+hW6bKyH0jkp7Jixqu8H59UmQ=";
   };
 
   patches = [ ./git_commit.patch ./janestreet-0.17.patch ];

@@ -1,6 +1,4 @@
-{ lib
-, fetchFromGitHub
-, nix-update-script
+{ lib, fetchFromGitHub, nix-update-script
 , buildDunePackage
 , base
 , ppx_sexp_conv
