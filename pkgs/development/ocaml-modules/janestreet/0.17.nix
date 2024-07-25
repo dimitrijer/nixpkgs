@@ -1,4 +1,12 @@
-{ self, bash, fetchpatch, fzf, lib, openssl, zstd }:
+{
+  self,
+  bash,
+  fetchpatch,
+  fzf,
+  lib,
+  openssl,
+  zstd,
+}:
 
 with self;
 
@@ -8,46 +16,56 @@ with self;
     pname = "abstract_algebra";
     hash = "sha256-W2rSSbppNkulCgGeTiovzP5zInPWIVfflDxWkGpEOFA=";
     meta.description = "A small library describing abstract algebra concepts";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   accessor = janePackage {
     pname = "accessor";
     hash = "sha256-1inoFwDDhnfhW+W3aAkcFNUkf5Umy8BDGDEbMty+Fts=";
-    meta.description =
-      "A library that makes it nicer to work with nested functional data structures";
+    meta.description = "A library that makes it nicer to work with nested functional data structures";
     propagatedBuildInputs = [ higher_kinded ];
   };
 
   accessor_async = janePackage {
     pname = "accessor_async";
     hash = "sha256-EYyxZur+yshYaX1EJbWc/bCaAa9PDKiuK87fIeqhspo=";
-    meta.description =
-      "Accessors for Async types, for use with the Accessor library";
-    propagatedBuildInputs = [ accessor_core async_kernel ];
+    meta.description = "Accessors for Async types, for use with the Accessor library";
+    propagatedBuildInputs = [
+      accessor_core
+      async_kernel
+    ];
   };
 
   accessor_base = janePackage {
     pname = "accessor_base";
     hash = "sha256-6LJ8dKPAuaxWinArkPl4OE0eYPqvM7+Ao6jff8jhjXc=";
-    meta.description =
-      "Accessors for Base types, for use with the Accessor library";
+    meta.description = "Accessors for Base types, for use with the Accessor library";
     propagatedBuildInputs = [ ppx_accessor ];
   };
 
   accessor_core = janePackage {
     pname = "accessor_core";
     hash = "sha256-ku83ZfLtVI8FvQhrKcnJmhmoNlYcVMKx1tor5N8Nq7M=";
-    meta.description =
-      "Accessors for Core types, for use with the Accessor library";
-    propagatedBuildInputs = [ accessor_base core_kernel ];
+    meta.description = "Accessors for Core types, for use with the Accessor library";
+    propagatedBuildInputs = [
+      accessor_base
+      core_kernel
+    ];
   };
 
   async = janePackage {
     pname = "async";
     hash = "sha256-CwRPH5tFZHJqptdmNwdZvKvSJ1Qr21gV1jaxsa/vFBU=";
     meta.description = "Monadic concurrency library";
-    propagatedBuildInputs = [ async_rpc_kernel async_log async_unix textutils ];
+    propagatedBuildInputs = [
+      async_rpc_kernel
+      async_log
+      async_unix
+      textutils
+    ];
     doCheck = false; # we don't have netkit_sockets
   };
 
@@ -55,8 +73,13 @@ with self;
     pname = "async_durable";
     hash = "sha256-CAU54j3K47p4hQqAtHJYuAQ0IvZPMQZKFp5J7G+xtjM=";
     meta.description = "Durable connections for use with async";
-    propagatedBuildInputs =
-      [ async_kernel async_rpc_kernel core core_kernel ppx_jane ];
+    propagatedBuildInputs = [
+      async_kernel
+      async_rpc_kernel
+      core
+      core_kernel
+      ppx_jane
+    ];
   };
 
   async_extra = janePackage {
@@ -77,24 +100,29 @@ with self;
     pname = "async_inotify";
     hash = "sha256-608G8OKQxqrQdYc1Cfrd8g8WLX6QwSeMUz8ORuSbmA8=";
     meta.description = "Async wrapper for inotify";
-    propagatedBuildInputs = [ async_find inotify ];
+    propagatedBuildInputs = [
+      async_find
+      inotify
+    ];
   };
 
   async_interactive = janePackage {
     pname = "async_interactive";
     hash = "sha256-hC7mLDLtvIEMKLMeDOC5ADiAGJlJqYF35RDI+porsKA=";
-    meta.description =
-      "Utilities for building simple command-line based user interfaces";
+    meta.description = "Utilities for building simple command-line based user interfaces";
     propagatedBuildInputs = [ async ];
   };
 
   async_js = janePackage {
     pname = "async_js";
     hash = "sha256-4t7dJ04lTQ0b6clf8AvtyC8ip43vIcEBXgHJLiRbuGM=";
-    meta.description =
-      "A small library that provide Async support for JavaScript platforms";
+    meta.description = "A small library that provide Async support for JavaScript platforms";
     buildInputs = [ js_of_ocaml-ppx ];
-    propagatedBuildInputs = [ async_rpc_kernel js_of_ocaml uri-sexp ];
+    propagatedBuildInputs = [
+      async_rpc_kernel
+      js_of_ocaml
+      uri-sexp
+    ];
   };
 
   async_kernel = janePackage {
@@ -108,31 +136,41 @@ with self;
     pname = "async_log";
     hash = "sha256-XeWC3oC0n4or3EDLrNLWXMWhyhH6kcah0Mdb56rZ5lA=";
     meta.description = "Logging library built on top of Async_unix";
-    propagatedBuildInputs =
-      [ async_kernel async_unix core core_kernel ppx_jane timezone ];
+    propagatedBuildInputs = [
+      async_kernel
+      async_unix
+      core
+      core_kernel
+      ppx_jane
+      timezone
+    ];
   };
 
   async_rpc_kernel = janePackage {
     pname = "async_rpc_kernel";
     hash = "sha256-zSqmRgybvWhS9XiNIqgxUjQU8xc9aXM69ZaBq4+r+HA=";
     meta.description = "Platform-independent core of Async RPC library";
-    propagatedBuildInputs = [ async_kernel protocol_version_header ];
+    propagatedBuildInputs = [
+      async_kernel
+      protocol_version_header
+    ];
   };
 
   async_rpc_websocket = janePackage {
     pname = "async_rpc_websocket";
     hash = "sha256-pbgG872Av6rX/CH2sOKgTVR42XpP0xhzdR/Bqoq7bSU=";
-    meta.description =
-      "Library to serve and dispatch Async RPCs over websockets";
-    propagatedBuildInputs =
-      [ async_rpc_kernel async_websocket cohttp_async_websocket ];
+    meta.description = "Library to serve and dispatch Async RPCs over websockets";
+    propagatedBuildInputs = [
+      async_rpc_kernel
+      async_websocket
+      cohttp_async_websocket
+    ];
   };
 
   async_sendfile = janePackage {
     pname = "async_sendfile";
     hash = "sha256-x2chts7U9hoGW6uvyfpHMkSwCx1JXhHX601Xg92Wk3U=";
-    meta.description =
-      "Thin wrapper around [Linux_ext.sendfile] to send full files";
+    meta.description = "Thin wrapper around [Linux_ext.sendfile] to send full files";
     propagatedBuildInputs = [ async_unix ];
   };
 
@@ -140,7 +178,10 @@ with self;
     pname = "async_shell";
     hash = "sha256-/wqfuKiQQufs/KhNtBn8C9AzX7GbP8s8cyWGynJ0m1M=";
     meta.description = "Shell helpers for Async";
-    propagatedBuildInputs = [ async shell ];
+    propagatedBuildInputs = [
+      async
+      shell
+    ];
   };
 
   async_smtp = janePackage {
@@ -165,31 +206,46 @@ with self;
     hash = "sha256-7obEoeckwydi2wHBkBmX0LynY1QVCb3sQ/U945eteJo=";
     meta.description = "Async wrappers for SSL";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ async ctypes ctypes-foreign openssl ];
+    propagatedBuildInputs = [
+      async
+      ctypes
+      ctypes-foreign
+      openssl
+    ];
   };
 
   async_unix = janePackage {
     pname = "async_unix";
     hash = "sha256-fA1e5AnNe/tMTMZ60jtGUofRi4rh+MmVx81kfhfaBaQ=";
     meta.description = "Monadic concurrency library";
-    propagatedBuildInputs = [ async_kernel core_unix cstruct ];
+    propagatedBuildInputs = [
+      async_kernel
+      core_unix
+      cstruct
+    ];
   };
 
   async_websocket = janePackage {
     pname = "async_websocket";
     hash = "sha256-22N+QO9hpkKHv3n9WkvtmJouxb/nuauv1UXdVV0zOGA=";
-    meta.description =
-      "A library that implements the websocket protocol on top of Async";
-    propagatedBuildInputs = [ async cryptokit ];
+    meta.description = "A library that implements the websocket protocol on top of Async";
+    propagatedBuildInputs = [
+      async
+      cryptokit
+    ];
   };
 
   babel = janePackage {
     pname = "babel";
     hash = "sha256-mRSlLXtaGj8DcdDZGUZbi16qQxtfb+fXkwxz6AXxN3o=";
-    meta.description =
-      "A library for defining Rpcs that can evolve over time without breaking backward compatibility";
-    propagatedBuildInputs =
-      [ async_rpc_kernel core ppx_jane streamable tilde_f ];
+    meta.description = "A library for defining Rpcs that can evolve over time without breaking backward compatibility";
+    propagatedBuildInputs = [
+      async_rpc_kernel
+      core
+      ppx_jane
+      streamable
+      tilde_f
+    ];
   };
 
   base = janePackage {
@@ -198,32 +254,46 @@ with self;
     hash = "sha256-5wqBpOHhiIy9JUuxb3OnpZHrHSM7VODuLSihaIyeFn0=";
     meta.description = "Full standard library replacement for OCaml";
     buildInputs = [ dune-configurator ];
-    propagatedBuildInputs = [ sexplib0 ocaml_intrinsics_kernel ];
+    propagatedBuildInputs = [
+      sexplib0
+      ocaml_intrinsics_kernel
+    ];
     checkInputs = [ alcotest ];
   };
 
   base_bigstring = janePackage {
     pname = "base_bigstring";
     hash = "sha256-tGDtkVOU10GzNsJ4wZtbqyIMjY5lHM4+rA3+w34TYOE=";
-    meta.description =
-      "String type based on [Bigarray], for use in I/O and C-bindings";
-    propagatedBuildInputs = [ int_repr ppx_jane ];
+    meta.description = "String type based on [Bigarray], for use in I/O and C-bindings";
+    propagatedBuildInputs = [
+      int_repr
+      ppx_jane
+    ];
   };
 
   base_trie = janePackage {
     pname = "base_trie";
     hash = "sha256-KuVDLJiEIjbvLCNI51iFLlsMli+hspWMyhrMk5pSL58=";
     meta.description = "Trie data structure library";
-    propagatedBuildInputs = [ base core expect_test_helpers_core ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      core
+      expect_test_helpers_core
+      ppx_jane
+    ];
   };
 
   base_quickcheck = janePackage {
     pname = "base_quickcheck";
     hash = "sha256-jDxO+/9Qnntt6ZNX1xvaWvoJ0JpnPqeq8X8nsYpeqsY=";
-    meta.description =
-      "Randomized testing framework, designed for compatibility with Base";
-    propagatedBuildInputs =
-      [ ppx_base ppx_fields_conv ppx_let ppx_sexp_value splittable_random ];
+    meta.description = "Randomized testing framework, designed for compatibility with Base";
+    propagatedBuildInputs = [
+      ppx_base
+      ppx_fields_conv
+      ppx_let
+      ppx_sexp_value
+      splittable_random
+    ];
   };
 
   bidirectional_map = janePackage {
@@ -235,9 +305,12 @@ with self;
   bignum = janePackage {
     pname = "bignum";
     hash = "sha256-QhVEZ97n/YUBBXYCshDa5UnZpv0BKK6xRN1kXabY3Es=";
-    propagatedBuildInputs = [ core_kernel zarith zarith_stubs_js ];
-    meta.description =
-      "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
+    propagatedBuildInputs = [
+      core_kernel
+      zarith
+      zarith_stubs_js
+    ];
+    meta.description = "Core-flavoured wrapper around zarith's arbitrary-precision rationals";
   };
 
   bin_prot = janePackage {
@@ -260,10 +333,13 @@ with self;
   bonsai = janePackage {
     pname = "bonsai";
     hash = "sha256-rr87o/w/a6NtCrDIIYmk2a5IZ1WJM/qJUeDqTLN1Gr4=";
-    meta.description =
-      "A library for building dynamic webapps, using Js_of_ocaml";
+    meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ ppx_pattern_bind ];
-    nativeBuildInputs = [ ppx_css js_of_ocaml-compiler ocaml-embed-file ];
+    nativeBuildInputs = [
+      ppx_css
+      js_of_ocaml-compiler
+      ocaml-embed-file
+    ];
     propagatedBuildInputs = [
       async
       async_durable
@@ -293,7 +369,10 @@ with self;
     pname = "capitalization";
     hash = "sha256-wq8SO+SXF+UQhSu+ElVYv9erZ8S54G3SzJd0HX/Vwyk=";
     meta.description = "Naming conventions for multiple-word identifiers";
-    propagatedBuildInputs = [ base ppx_base ];
+    propagatedBuildInputs = [
+      base
+      ppx_base
+    ];
   };
 
   cinaps = janePackage {
@@ -312,21 +391,29 @@ with self;
     pname = "codicons";
     hash = "sha256-S4VrMObA5+SNeL/XsWU6SoSD/0TVvuqHjthUaQCDoRU=";
     meta.description = "Icons from VS code";
-    propagatedBuildInputs = [ core ppx_jane virtual_dom ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      virtual_dom
+    ];
   };
 
   cohttp_async_websocket = janePackage {
     pname = "cohttp_async_websocket";
     hash = "sha256-0InGCF34LWQes9S4OgbR6w+6cylThYuj1Dj0aQyTnuY=";
     meta.description = "Websocket library for use with cohttp and async";
-    propagatedBuildInputs = [ async_websocket cohttp-async ppx_jane uri-sexp ];
+    propagatedBuildInputs = [
+      async_websocket
+      cohttp-async
+      ppx_jane
+      uri-sexp
+    ];
   };
 
   cohttp_static_handler = janePackage {
     pname = "cohttp_static_handler";
     hash = "sha256-RB/sUq1tL8A3m9YhHHx2LFqoExTX187VeZI9MRb1NeA=";
-    meta.description =
-      "A library for easily creating a cohttp handler for static files";
+    meta.description = "A library for easily creating a cohttp handler for static files";
     propagatedBuildInputs = [ cohttp-async ];
   };
 
@@ -334,33 +421,49 @@ with self;
     pname = "content_security_policy";
     hash = "sha256-AQN2JJA+5B0PERNNOA9FXX6rIeej40bwJtQmHP6GKw4=";
     meta.description = "A library for building content-security policies";
-    propagatedBuildInputs = [ base64 cryptokit core ppx_jane ];
+    propagatedBuildInputs = [
+      base64
+      cryptokit
+      core
+      ppx_jane
+    ];
   };
 
   core = janePackage {
     pname = "core";
     version = "0.17.1";
     hash = "sha256-XkABcvglVJLVnWJmvfr5eVywyclPSDqanVOLQNqdNtQ=";
-    meta.description =
-      "Industrial strength alternative to OCaml's standard library";
+    meta.description = "Industrial strength alternative to OCaml's standard library";
     buildInputs = [ jst-config ];
-    propagatedBuildInputs =
-      [ base base_bigstring base_quickcheck ppx_diff ppx_jane time_now ];
+    propagatedBuildInputs = [
+      base
+      base_bigstring
+      base_quickcheck
+      ppx_diff
+      ppx_jane
+      time_now
+    ];
   };
 
   core_bench = janePackage {
     pname = "core_bench";
     hash = "sha256-oXE3FuCCIbX2M0r4Ds2BMUU6g1bqe9E87lDo2CcMtMU=";
     meta.description = "Benchmarking library";
-    propagatedBuildInputs = [ core_extended delimited_parsing textutils ];
+    propagatedBuildInputs = [
+      core_extended
+      delimited_parsing
+      textutils
+    ];
   };
 
   core_extended = janePackage {
     pname = "core_extended";
     hash = "sha256-Xl6czD1gdnvHkXDz+qa7TWZq6dm8wlDqywxEIi2R6bI=";
-    meta.description =
-      "Extra components that are not as closely vetted or as stable as Core";
-    propagatedBuildInputs = [ core_unix record_builder ];
+    meta.description = "Extra components that are not as closely vetted or as stable as Core";
+    propagatedBuildInputs = [
+      core_unix
+      record_builder
+    ];
   };
 
   core_kernel = janePackage {
@@ -368,7 +471,13 @@ with self;
     hash = "sha256-l7U0edUCNHTroYMBHiEMDx5sl7opEmmmeo2Z06tCMts=";
     meta.description = "System-independent part of Core";
     buildInputs = [ jst-config ];
-    propagatedBuildInputs = [ base_bigstring core int_repr sexplib uopt ];
+    propagatedBuildInputs = [
+      base_bigstring
+      core
+      int_repr
+      sexplib
+      uopt
+    ];
     doCheck = false; # we don't have quickcheck_deprecated
   };
 
@@ -388,37 +497,49 @@ with self;
     postPatch = ''
       patchShebangs unix_pseudo_terminal/src/discover.sh
     '';
-    doCheck =
-      false; # command_validate_parsing.exe is not specified in test build deps
+    doCheck = false; # command_validate_parsing.exe is not specified in test build deps
   };
 
   csvfields = janePackage {
     pname = "csvfields";
     hash = "sha256-hCH2NGQIRTU5U3TUOYHao6Kz5PhnLbySmzic4ytppEc=";
-    propagatedBuildInputs = [ core num ];
+    propagatedBuildInputs = [
+      core
+      num
+    ];
     meta.description = "Runtime support for ppx_xml_conv and ppx_csv_conv";
   };
 
   dedent = janePackage {
     pname = "dedent";
     hash = "sha256-Scir/gaIhmNowXZ0tv57M/Iv1GXQIkyDks1sU1DAoIQ=";
-    propagatedBuildInputs = [ base ppx_jane stdio ];
-    meta.description =
-      "A library for improving redability of multi-line string constants in code";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+      stdio
+    ];
+    meta.description = "A library for improving redability of multi-line string constants in code";
   };
 
   delimited_parsing = janePackage {
     pname = "delimited_parsing";
     hash = "sha256-bgt99kQvaU7FPK1+K1UOAUbSaaaCB1DV23Cuo3A68M0=";
-    propagatedBuildInputs = [ async core_extended ];
-    meta.description =
-      "Parsing of character (e.g., comma) separated and fixed-width values";
+    propagatedBuildInputs = [
+      async
+      core_extended
+    ];
+    meta.description = "Parsing of character (e.g., comma) separated and fixed-width values";
   };
 
   legacy_diffable = janePackage {
     pname = "legacy_diffable";
     hash = "sha256-wUSG04bHCnwqXpWKgkceAORs1inxexiPKZIR9fEVmCo=";
-    propagatedBuildInputs = [ core ppx_jane stored_reversed streamable ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      stored_reversed
+      streamable
+    ];
     meta.description = "An interface for diffs";
   };
 
@@ -426,51 +547,69 @@ with self;
     pname = "ecaml";
     hash = "sha256-CEroXMEIAfvXD603bnIVwzcrE3KbVaOOhGZastkQcdU=";
     meta.description = "Library for writing Emacs plugin in OCaml";
-    propagatedBuildInputs = [ async expect_test_helpers_core ];
+    propagatedBuildInputs = [
+      async
+      expect_test_helpers_core
+    ];
   };
 
   email_message = janePackage {
     pname = "email_message";
     hash = "sha256-1OJ6bQb/rdyfAgMyuKT/ylpa8qBldZV5kEm0B45Ej1w=";
     meta.description = "E-mail message parser";
-    propagatedBuildInputs = [ angstrom async base64 cryptokit magic-mime re2 ];
+    propagatedBuildInputs = [
+      angstrom
+      async
+      base64
+      cryptokit
+      magic-mime
+      re2
+    ];
   };
 
   env_config = janePackage {
     pname = "env_config";
     hash = "sha256-vG309p7xqanTnrnHBwvuCO3YD4tVbTNa7F1F9sZDZE0=";
-    meta.description =
-      "Helper library for retrieving configuration from an environment variable";
-    propagatedBuildInputs = [ async core core_unix ppx_jane ];
+    meta.description = "Helper library for retrieving configuration from an environment variable";
+    propagatedBuildInputs = [
+      async
+      core
+      core_unix
+      ppx_jane
+    ];
   };
 
   expect_test_helpers_async = janePackage {
     pname = "expect_test_helpers_async";
     hash = "sha256-oInNgNISqOrmQUXVxzjDy+mS06yPEeFPGIvaKnCETjk=";
     meta.description = "Async helpers for writing expectation tests";
-    propagatedBuildInputs = [ async expect_test_helpers_core ];
+    propagatedBuildInputs = [
+      async
+      expect_test_helpers_core
+    ];
   };
 
   expect_test_helpers_core = janePackage {
     pname = "expect_test_helpers_core";
     hash = "sha256-vnlDZ8k3JFCdN6WGiaG9OEEdQJnw0/eMogFCfTXIu2Y=";
     meta.description = "Helpers for writing expectation tests";
-    propagatedBuildInputs = [ core_kernel sexp_pretty ];
+    propagatedBuildInputs = [
+      core_kernel
+      sexp_pretty
+    ];
   };
 
   fieldslib = janePackage {
     pname = "fieldslib";
     hash = "sha256-Zfnc32SghjZYTlnSdo6JPm4WCb7BPVjrWNDfeMZHaiU=";
-    meta.description =
-      "Syntax extension to define first class values representing record fields, to get and set record fields, iterate and fold over all fields of a record and create new record values";
+    meta.description = "Syntax extension to define first class values representing record fields, to get and set record fields, iterate and fold over all fields of a record and create new record values";
     propagatedBuildInputs = [ base ];
   };
 
   file_path = janePackage {
     pname = "file_path";
     hash = "sha256-XSLfYasn6qMZmDzAUGssOM9EX09n2W9/imTgNoSBEyk=";
-    meta.description =
-      "A library for typed manipulation of UNIX-style file paths";
+    meta.description = "A library for typed manipulation of UNIX-style file paths";
     propagatedBuildInputs = [
       async
       core
@@ -486,14 +625,21 @@ with self;
     pname = "fuzzy_match";
     hash = "sha256-XB1U4mY0LcdsKYRnmV0SR4ODTIZynZetBk5X5SdHs44=";
     meta.description = "A library for fuzzy string matching";
-    propagatedBuildInputs = [ core ppx_jane ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+    ];
   };
 
   fzf = janePackage {
     pname = "fzf";
     hash = "sha256-yHdvC3cB5sVXsZQbtNzUZkaaqOe/7y8pDHgLwugAlQg=";
     meta.description = "A library for running the fzf command line tool";
-    propagatedBuildInputs = [ async core_kernel ppx_jane ];
+    propagatedBuildInputs = [
+      async
+      core_kernel
+      ppx_jane
+    ];
     postPatch = ''
       substituteInPlace src/fzf.ml --replace /usr/bin/fzf ${fzf}/bin/fzf
     '';
@@ -503,48 +649,64 @@ with self;
     pname = "gel";
     hash = "sha256-zGDlxbJINXD1qG7EifZGDfKbQpehdHyR/WLRJRYlwUg=";
     meta.description = "A library to mark non-record fields global";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   hex_encode = janePackage {
     pname = "hex_encode";
     hash = "sha256-5DqaCJllphdEreOpzAjT61qb3M6aN9b2xhiUjHVLrvE=";
     meta.description = "Hexadecimal encoding library";
-    propagatedBuildInputs = [ core ppx_jane ounit ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      ounit
+    ];
   };
 
   higher_kinded = janePackage {
     pname = "higher_kinded";
     hash = "sha256-6aZxgGzltRs2aS4MYJh23Gpoqcko6xJxU11T6KixXno=";
-    meta.description =
-      "A library with an encoding of higher kinded types in OCaml";
-    propagatedBuildInputs = [ base ppx_jane ];
+    meta.description = "A library with an encoding of higher kinded types in OCaml";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   incr_dom = janePackage {
     pname = "incr_dom";
     hash = "sha256-dkF7+aq5Idw1ltDgGEjGYspdmOXjXqv8AA27b4M7U8A=";
-    meta.description =
-      "A library for building dynamic webapps, using Js_of_ocaml";
+    meta.description = "A library for building dynamic webapps, using Js_of_ocaml";
     buildInputs = [ js_of_ocaml-ppx ];
-    propagatedBuildInputs = [ async_js incr_map incr_select virtual_dom ];
+    propagatedBuildInputs = [
+      async_js
+      incr_map
+      incr_select
+      virtual_dom
+    ];
   };
 
   incr_map = janePackage {
     pname = "incr_map";
     hash = "sha256-qNahlxe3Pe1EEcFz1bAKUw3vBaNjgDlahQeuj/+VqbI=";
-    meta.description =
-      "Helpers for incremental operations on map like data structures";
+    meta.description = "Helpers for incremental operations on map like data structures";
     buildInputs = [ ppx_pattern_bind ];
-    propagatedBuildInputs =
-      [ abstract_algebra bignum legacy_diffable incremental streamable ];
+    propagatedBuildInputs = [
+      abstract_algebra
+      bignum
+      legacy_diffable
+      incremental
+      streamable
+    ];
   };
 
   incr_select = janePackage {
     pname = "incr_select";
     hash = "sha256-/VCNiE8Y7LBL0OHd5V+tB/b3HGKhfSvreU6LZgurYAg=";
-    meta.description =
-      "Handling of large set of incremental outputs from a single input";
+    meta.description = "Handling of large set of incremental outputs from a single input";
     propagatedBuildInputs = [ incremental ];
   };
 
@@ -552,29 +714,41 @@ with self;
     pname = "incremental";
     hash = "sha256-siBN36Vv0Bktyxh+8tL6XkUGLqSYMxqvd0UWuTRgAnI=";
     meta.description = "Library for incremental computations";
-    propagatedBuildInputs = [ core_kernel lru_cache ];
+    propagatedBuildInputs = [
+      core_kernel
+      lru_cache
+    ];
   };
 
   indentation_buffer = janePackage {
     pname = "indentation_buffer";
     hash = "sha256-/IUZyRkcxUsddzGGIoaLpXbpCxJ1satK79GkzPxSPSc=";
     meta.description = "A library for building strings with indentation";
-    propagatedBuildInputs = [ core ppx_jane ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+    ];
   };
 
   int_repr = janePackage {
     pname = "int_repr";
     hash = "sha256-yeaAzw95zB1wow9Alg18CU+eemZVxjdLiO/wVRitDwE=";
     meta.description = "Integers of various widths";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   janestreet_cpuid = janePackage {
     pname = "janestreet_cpuid";
     hash = "sha256-3ZwEZQSkJJyFW5/+C9x8nW6+GrfVwccNFPlcs7qNcjQ=";
-    meta.description =
-      "A library for parsing CPU capabilities out of the `cpuid` instruction";
-    propagatedBuildInputs = [ core core_kernel ppx_jane ];
+    meta.description = "A library for parsing CPU capabilities out of the `cpuid` instruction";
+    propagatedBuildInputs = [
+      core
+      core_kernel
+      ppx_jane
+    ];
   };
 
   janestreet_csv = janePackage {
@@ -602,7 +776,10 @@ with self;
     pname = "jane_rope";
     hash = "sha256-Lo4+ZUX9R2EGrz4BN+LqdJgVXB3hQqNifgwsjFC1Hfs=";
     meta.description = "String representation with cheap concatenation";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   jane-street-headers = janePackage {
@@ -614,39 +791,58 @@ with self;
   js_of_ocaml_patches = janePackage {
     pname = "js_of_ocaml_patches";
     hash = "sha256-N61IEZLGfCU3ZX+sw35DAUqUh3u8RaCFcNlXxU1dvL8=";
-    meta.description =
-      "Additions to js_of_ocaml's standard library that are required by Jane Street libraries";
-    propagatedBuildInputs = [ js_of_ocaml js_of_ocaml-ppx ];
+    meta.description = "Additions to js_of_ocaml's standard library that are required by Jane Street libraries";
+    propagatedBuildInputs = [
+      js_of_ocaml
+      js_of_ocaml-ppx
+    ];
     patches = [ ./js_of_ocaml_patches.patch ];
   };
 
   jsonaf = janePackage {
     pname = "jsonaf";
     hash = "sha256-MMIDHc40cmPpO0n8yREIGMyFndw3NfvGUhy6vHnn40w=";
-    meta.description =
-      "A library for parsing, manipulating, and serializing data structured as JSON";
-    propagatedBuildInputs = [ base ppx_jane angstrom faraday ];
+    meta.description = "A library for parsing, manipulating, and serializing data structured as JSON";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+      angstrom
+      faraday
+    ];
   };
 
   jst-config = janePackage {
     pname = "jst-config";
     hash = "sha256-xwQ+q2Hsduu2vWMWFcjoj3H8Es00N7Mv9LwIZG4hw7c=";
     meta.description = "Compile-time configuration for Jane Street libraries";
-    buildInputs = [ dune-configurator ppx_assert stdio ];
+    buildInputs = [
+      dune-configurator
+      ppx_assert
+      stdio
+    ];
   };
 
   lru_cache = janePackage {
     pname = "janestreet_lru_cache";
     hash = "sha256-/UMSccN9yGAXF7/g6ueSnsfPSnF1fm0zJIRFsThZvH8=";
     meta.description = "An LRU Cache implementation";
-    propagatedBuildInputs = [ core_kernel ppx_jane ];
+    propagatedBuildInputs = [
+      core_kernel
+      ppx_jane
+    ];
   };
 
   man_in_the_middle_debugger = janePackage {
     pname = "man_in_the_middle_debugger";
     hash = "sha256-ImEzn/EssgW63vdGhLMp4NB/FW0SsCMQ32ZNAs7bDg4=";
     meta.description = "Man-in-the-middle debugging library";
-    propagatedBuildInputs = [ async core ppx_jane angstrom angstrom-async ];
+    propagatedBuildInputs = [
+      async
+      core
+      ppx_jane
+      angstrom
+      angstrom-async
+    ];
   };
 
   n_ary = janePackage {
@@ -668,27 +864,40 @@ with self;
   numeric_string = janePackage {
     pname = "numeric_string";
     hash = "sha256-cU5ETGfavkkiqZOjehCYg06YdDk8W+ZDqz17FGWHey8=";
-    meta.description =
-      "A comparison function for strings that sorts numeric fragments of strings according to their numeric value";
-    propagatedBuildInputs = [ base ppx_jane ];
+    meta.description = "A comparison function for strings that sorts numeric fragments of strings according to their numeric value";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
-  ocaml-compiler-libs = janePackage ({
-    pname = "ocaml-compiler-libs";
-    minimalOCamlVersion = "4.04.1";
-    meta.description = "OCaml compiler libraries repackaged";
-  } // (if lib.versionAtLeast ocaml.version "5.2" then {
-    version = "0.17.0";
-    hash = "sha256-QaC6BWrpFblra6X1+TrlK+J3vZxLvLJZ2b0427DiQzM=";
-  } else {
-    version = "0.12.4";
-    hash = "sha256-W+KUguz55yYAriHRMcQy8gRPzh2TZSJnexG1JI8TLgI=";
-  }));
+  ocaml-compiler-libs = janePackage (
+    {
+      pname = "ocaml-compiler-libs";
+      minimalOCamlVersion = "4.04.1";
+      meta.description = "OCaml compiler libraries repackaged";
+    }
+    // (
+      if lib.versionAtLeast ocaml.version "5.2" then
+        {
+          version = "0.17.0";
+          hash = "sha256-QaC6BWrpFblra6X1+TrlK+J3vZxLvLJZ2b0427DiQzM=";
+        }
+      else
+        {
+          version = "0.12.4";
+          hash = "sha256-W+KUguz55yYAriHRMcQy8gRPzh2TZSJnexG1JI8TLgI=";
+        }
+    )
+  );
 
   ocaml-embed-file = janePackage {
     pname = "ocaml-embed-file";
     hash = "sha256-7fyZ5DNcRHud0rd4dLUv9Vyf3lMwMVxgkl9jVUn1/lw=";
-    propagatedBuildInputs = [ async ppx_jane ];
+    propagatedBuildInputs = [
+      async
+      ppx_jane
+    ];
     meta.description = "Files contents as module constants";
   };
 
@@ -703,7 +912,10 @@ with self;
     pname = "ocaml_intrinsics";
     hash = "sha256-Ndt6ZPJamBYzr1YA941BLwvRgkkbD8AEQR/JjjR38xI=";
     meta.description = "A library of intrinsics for OCaml";
-    buildInputs = [ dune-configurator ocaml_intrinsics_kernel ];
+    buildInputs = [
+      dune-configurator
+      ocaml_intrinsics_kernel
+    ];
   };
 
   ocaml_openapi_generator = janePackage {
@@ -729,22 +941,32 @@ with self;
     pname = "of_json";
     hash = "sha256-pZCiwXRwZK6ohsGz/WLacgo48ekdT35uD4VESvGxH8A=";
     meta.description = "A friendly applicative interface for Jsonaf";
-    buildInputs = [ core core_extended jsonaf ppx_jane ];
+    buildInputs = [
+      core
+      core_extended
+      jsonaf
+      ppx_jane
+    ];
   };
 
   ordinal_abbreviation = janePackage {
     pname = "ordinal_abbreviation";
     hash = "sha256-kmTGnGbhdiUoXXw2DEAeZJL2sudEf8BRRt2RHCdL7HU=";
-    meta.description =
-      "A minimal library for generating ordinal names of integers";
-    buildInputs = [ base ppx_jane ];
+    meta.description = "A minimal library for generating ordinal names of integers";
+    buildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   parsexp = janePackage {
     pname = "parsexp";
     hash = "sha256-iKrZ6XDLM6eRl7obaniDKK6X8R7Kxry6HD7OQBwh3NU=";
     meta.description = "S-expression parsing library";
-    propagatedBuildInputs = [ base sexplib0 ];
+    propagatedBuildInputs = [
+      base
+      sexplib0
+    ];
   };
 
   patdiff = janePackage {
@@ -754,8 +976,14 @@ with self;
     # Used by patdiff-git-wrapper.  Providing it here also causes the shebang
     # line to be automatically patched.
     buildInputs = [ bash ];
-    propagatedBuildInputs = [ core_unix patience_diff ocaml_pcre ];
-    meta = { description = "File Diff using the Patience Diff algorithm"; };
+    propagatedBuildInputs = [
+      core_unix
+      patience_diff
+      ocaml_pcre
+    ];
+    meta = {
+      description = "File Diff using the Patience Diff algorithm";
+    };
     postPatch = ''
       patchShebangs test/bin/setup.sh
     '';
@@ -765,16 +993,14 @@ with self;
   patience_diff = janePackage {
     pname = "patience_diff";
     hash = "sha256-sn/8SvMt7kzzuYUwhB/uH/3mO1aIKHw/oRYRzA7goFU=";
-    meta.description =
-      "Diff library using Bram Cohen's patience diff algorithm";
+    meta.description = "Diff library using Bram Cohen's patience diff algorithm";
     propagatedBuildInputs = [ core_kernel ];
   };
 
   polling_state_rpc = janePackage {
     pname = "polling_state_rpc";
     hash = "sha256-fZKGva11ztuM+q0Lc6rr9NEH/Qo+wFmE6Rr1/TJm7rA=";
-    meta.description =
-      "An RPC which tracks state on the client and server so it only needs to send diffs across the wire";
+    meta.description = "An RPC which tracks state on the client and server so it only needs to send diffs across the wire";
     propagatedBuildInputs = [
       async_kernel
       async_rpc_kernel
@@ -789,38 +1015,48 @@ with self;
   posixat = janePackage {
     pname = "posixat";
     hash = "sha256-G+5q8x1jfG3wEwNzX2tkcC2Pm4E5/ZYxQyBwCUNXIrw=";
-    propagatedBuildInputs = [ ppx_optcomp ppx_sexp_conv ];
+    propagatedBuildInputs = [
+      ppx_optcomp
+      ppx_sexp_conv
+    ];
     meta.description = "Binding to the posix *at functions";
   };
 
   ppx_accessor = janePackage {
     pname = "ppx_accessor";
     hash = "sha256-vK6lA0J98bDGtVthIdU76ckzH+rpNUD1cQ3vMzHy0Iw=";
-    meta.description =
-      "[@@deriving] plugin to generate accessors for use with the Accessor libraries";
+    meta.description = "[@@deriving] plugin to generate accessors for use with the Accessor libraries";
     propagatedBuildInputs = [ accessor ];
   };
 
   ppx_assert = janePackage {
     pname = "ppx_assert";
     hash = "sha256-o9ywdFH6+qoJ3eWb29/gGlkWkHDMuBx626mNxrT1D8A=";
-    meta.description =
-      "Assert-like extension nodes that raise useful errors on failure";
-    propagatedBuildInputs = [ ppx_cold ppx_compare ppx_here ppx_sexp_conv ];
+    meta.description = "Assert-like extension nodes that raise useful errors on failure";
+    propagatedBuildInputs = [
+      ppx_cold
+      ppx_compare
+      ppx_here
+      ppx_sexp_conv
+    ];
   };
 
   ppx_base = janePackage {
     pname = "ppx_base";
     hash = "sha256-/s7c8vfLIO1pPajNldMgurBKXsSzQ8yxqFI6QZCHm5I=";
     meta.description = "Base set of ppx rewriters";
-    propagatedBuildInputs = [ ppx_cold ppx_enumerate ppx_globalize ppx_hash ];
+    propagatedBuildInputs = [
+      ppx_cold
+      ppx_enumerate
+      ppx_globalize
+      ppx_hash
+    ];
   };
 
   ppx_bench = janePackage {
     pname = "ppx_bench";
     hash = "sha256-y4nL/wwjJUL2Fa7Ne0f7SR5flCjT1ra9M1uBHOUZWCg=";
-    meta.description =
-      "Syntax extension for writing in-line benchmarks in ocaml code";
+    meta.description = "Syntax extension for writing in-line benchmarks in ocaml code";
     propagatedBuildInputs = [ ppx_inline_test ];
   };
 
@@ -828,15 +1064,17 @@ with self;
     pname = "ppx_bin_prot";
     hash = "sha256-nQps/+Csx3+6H6KBzIm/dLCGWJ9fcRD7JxB4P2lky0o=";
     meta.description = "Generation of bin_prot readers and writers from types";
-    propagatedBuildInputs = [ bin_prot ppx_here ];
+    propagatedBuildInputs = [
+      bin_prot
+      ppx_here
+    ];
     doCheck = false; # circular dependency with ppx_jane
   };
 
   ppx_cold = janePackage {
     pname = "ppx_cold";
     hash = "sha256-fFZqlcbUS7D+GjnxSjGYckkQtx6ZcPNtOIsr6Rt6D9A=";
-    meta.description =
-      "Expands [@cold] into [@inline never][@specialise never][@local never]";
+    meta.description = "Expands [@cold] into [@inline never][@specialise never][@local never]";
     propagatedBuildInputs = [ ppxlib ];
   };
 
@@ -844,29 +1082,34 @@ with self;
     pname = "ppx_compare";
     hash = "sha256-uAXB9cba0IBl+cA2CAuGVVxuos4HXH5jlB6Qjxx44Y0=";
     meta.description = "Generation of comparison functions from types";
-    propagatedBuildInputs = [ ppxlib ppxlib_jane base ];
+    propagatedBuildInputs = [
+      ppxlib
+      ppxlib_jane
+      base
+    ];
   };
 
   ppx_conv_func = janePackage {
     pname = "ppx_conv_func";
     hash = "sha256-PJ8T0u8VkxefaxojwrmbMXDjqyfAIxKe92B8QqRY2JU=";
     meta.description = "Part of the Jane Street's PPX rewriters collection";
-    propagatedBuildInputs = [ ppxlib base ];
+    propagatedBuildInputs = [
+      ppxlib
+      base
+    ];
   };
 
   ppx_custom_printf = janePackage {
     pname = "ppx_custom_printf";
     hash = "sha256-DFgDb9MIFCqglYoMgPUN0zEaxkr7VJAXgLxq1yp8ap4=";
-    meta.description =
-      "Printf-style format-strings for user-defined string conversion";
+    meta.description = "Printf-style format-strings for user-defined string conversion";
     propagatedBuildInputs = [ ppx_sexp_conv ];
   };
 
   ppx_css = janePackage {
     pname = "ppx_css";
     hash = "sha256-mzLMVtNTy9NrVaNgsRa+oQynxXnh2qlHJCfr3FLFJ2I=";
-    meta.description =
-      "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
+    meta.description = "A ppx that takes in css strings and produces a module for accessing the unique names defined within";
     propagatedBuildInputs = [
       async
       async_unix
@@ -884,69 +1127,98 @@ with self;
     pname = "ppx_csv_conv";
     hash = "sha256-NtqfagLIYiuyBjEAxilAhATx8acJwD7LykHBzfr+yAc=";
     meta.description = "Generate functions to read/write records in csv format";
-    propagatedBuildInputs = [ csvfields ppx_conv_func ];
+    propagatedBuildInputs = [
+      csvfields
+      ppx_conv_func
+    ];
   };
 
   ppx_demo = janePackage {
     pname = "ppx_demo";
     hash = "sha256-blD96GhicOj3b6jYNniSpq6fBR+ul9Y2kn0ZmfbeVMo=";
-    meta.description =
-      "PPX that exposes the source code string of an expression/module structure";
-    propagatedBuildInputs = [ core dedent ppx_jane ppxlib ];
+    meta.description = "PPX that exposes the source code string of an expression/module structure";
+    propagatedBuildInputs = [
+      core
+      dedent
+      ppx_jane
+      ppxlib
+    ];
   };
 
   ppx_derive_at_runtime = janePackage {
     pname = "ppx_derive_at_runtime";
     hash = "sha256-Y/z4BKFRt3z1lUGdc7SznIv/ys//dZHoPSnsouj1GtI=";
     meta.description = "Define a new ppx deriver by naming a runtime module";
-    propagatedBuildInputs = [ base expect_test_helpers_core ppx_jane ppxlib ];
+    propagatedBuildInputs = [
+      base
+      expect_test_helpers_core
+      ppx_jane
+      ppxlib
+    ];
   };
 
   ppx_diff = janePackage {
     pname = "ppx_diff";
     hash = "sha256-MAn+vcU6vLR8g16Wq1sORyLcLgWxLsazMQY1syY6HsA=";
-    meta.description =
-      "Generation of diffs and update functions for ocaml types";
-    propagatedBuildInputs = [ base gel ppx_compare ppx_enumerate ppx_jane ];
+    meta.description = "Generation of diffs and update functions for ocaml types";
+    propagatedBuildInputs = [
+      base
+      gel
+      ppx_compare
+      ppx_enumerate
+      ppx_jane
+    ];
   };
 
   ppx_disable_unused_warnings = janePackage {
     pname = "ppx_disable_unused_warnings";
     hash = "sha256-KHWIufXU+k6xCLf8l50Pp/1JZ2wFrKnKT/aQYpadlmU=";
-    meta.description = ''
-      Expands [@disable_unused_warnings] into [@warning "-20-26-32-33-34-35-36-37-38-39-60-66-67"]'';
+    meta.description = ''Expands [@disable_unused_warnings] into [@warning "-20-26-32-33-34-35-36-37-38-39-60-66-67"]'';
     propagatedBuildInputs = [ ppxlib ];
   };
 
   ppx_embed_file = janePackage {
     pname = "ppx_embed_file";
     hash = "sha256-Ew6/X7oAq81ldERU37QWXQdgReEtPD/lxbku8WZNJ6A=";
-    meta.description =
-      "A PPX that allows embedding files directly into executables/libraries as strings or bytes";
-    propagatedBuildInputs = [ core ppx_jane shell ppxlib ];
+    meta.description = "A PPX that allows embedding files directly into executables/libraries as strings or bytes";
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      shell
+      ppxlib
+    ];
   };
 
   ppx_enumerate = janePackage {
     pname = "ppx_enumerate";
     hash = "sha256-YqBrxp2fe91k8L3aQVW6egoDPj8onGSRueQkE2Icdu4=";
     meta.description = "Generate a list containing all values of a finite type";
-    propagatedBuildInputs = [ ppxlib ppxlib_jane ];
+    propagatedBuildInputs = [
+      ppxlib
+      ppxlib_jane
+    ];
   };
 
   ppx_expect = janePackage {
     pname = "ppx_expect";
     hash = "sha256-m4Nr48ZET632I6vw5RjpNA0elW3lpN3aPmfA3RzsEn8=";
     meta.description = "Cram like framework for OCaml";
-    propagatedBuildInputs = [ ppx_here ppx_inline_test re ];
+    propagatedBuildInputs = [
+      ppx_here
+      ppx_inline_test
+      re
+    ];
     doCheck = false; # test build rules broken
   };
 
   ppx_fields_conv = janePackage {
     pname = "ppx_fields_conv";
     hash = "sha256-FA7hDgqJMJ2obsVwzwaGnNLPvjP0SkTec8Nh3znuNDQ=";
-    meta.description =
-      "Generation of accessor and iteration functions for ocaml records";
-    propagatedBuildInputs = [ fieldslib ppxlib ];
+    meta.description = "Generation of accessor and iteration functions for ocaml records";
+    propagatedBuildInputs = [
+      fieldslib
+      ppxlib
+    ];
   };
 
   ppx_fixed_literal = janePackage {
@@ -959,17 +1231,22 @@ with self;
   ppx_globalize = janePackage {
     pname = "ppx_globalize";
     hash = "sha256-LKV5zfaf6AXn3NzOhN2ka8NtjItPTIsfmoJVBw5bYi8=";
-    meta.description =
-      "A ppx rewriter that generates functions to copy local values to the global heap";
-    propagatedBuildInputs = [ base ppxlib ppxlib_jane ];
+    meta.description = "A ppx rewriter that generates functions to copy local values to the global heap";
+    propagatedBuildInputs = [
+      base
+      ppxlib
+      ppxlib_jane
+    ];
   };
 
   ppx_hash = janePackage {
     pname = "ppx_hash";
     hash = "sha256-GADCLoF2GjZkvAiezn0xyReCs1avrUgjJGSS/pMNq38=";
-    meta.description =
-      "A ppx rewriter that generates hash functions from type expressions and definitions";
-    propagatedBuildInputs = [ ppx_compare ppx_sexp_conv ];
+    meta.description = "A ppx rewriter that generates hash functions from type expressions and definitions";
+    propagatedBuildInputs = [
+      ppx_compare
+      ppx_sexp_conv
+    ];
   };
 
   ppx_here = janePackage {
@@ -990,9 +1267,11 @@ with self;
   ppx_inline_test = janePackage {
     pname = "ppx_inline_test";
     hash = "sha256-pNdrmAlT3MUbuPUcMmCRcUIXv4fZ/o/IofJmnUKf8Cs=";
-    meta.description =
-      "Syntax extension for writing in-line tests in ocaml code";
-    propagatedBuildInputs = [ ppxlib time_now ];
+    meta.description = "Syntax extension for writing in-line tests in ocaml code";
+    propagatedBuildInputs = [
+      ppxlib
+      time_now
+    ];
     doCheck = false; # test build rules broken
   };
 
@@ -1024,30 +1303,39 @@ with self;
   ppx_jsonaf_conv = janePackage {
     pname = "ppx_jsonaf_conv";
     hash = "sha256-v7CYOJ1g4LkqIv5De5tQjjkBWXqKHbvqfSr0X5jBUuM=";
-    meta.description =
-      "[@@deriving] plugin to generate Jsonaf conversion functions";
-    propagatedBuildInputs = [ base jsonaf ppx_jane ppxlib ];
+    meta.description = "[@@deriving] plugin to generate Jsonaf conversion functions";
+    propagatedBuildInputs = [
+      base
+      jsonaf
+      ppx_jane
+      ppxlib
+    ];
   };
 
   ppx_js_style = janePackage {
     pname = "ppx_js_style";
     hash = "sha256-7jRzxe4bLyZ2vnHeqWiLlCUvOlNUAk0dwCfBFhrykUU=";
     meta.description = "Code style checker for Jane Street Packages";
-    propagatedBuildInputs = [ octavius ppxlib ];
+    propagatedBuildInputs = [
+      octavius
+      ppxlib
+    ];
   };
 
   ppx_let = janePackage {
     pname = "ppx_let";
     hash = "sha256-JkNQgbPHVDH659m4Xy9ipcZ/iqGtj5q1qQn1P+O7TUY=";
     meta.description = "Monadic let-bindings";
-    propagatedBuildInputs = [ ppxlib ppx_here ];
+    propagatedBuildInputs = [
+      ppxlib
+      ppx_here
+    ];
   };
 
   ppx_log = janePackage {
     pname = "ppx_log";
     hash = "sha256-llnjWeJH4eg5WtegILRxdwO3RWGWTFeCIKr6EbrUDI4=";
-    meta.description =
-      "Ppx_sexp_message-like extension nodes for lazily rendering log messages";
+    meta.description = "Ppx_sexp_message-like extension nodes for lazily rendering log messages";
     propagatedBuildInputs = [
       base
       ppx_compare
@@ -1069,8 +1357,7 @@ with self;
   ppx_module_timer = janePackage {
     pname = "ppx_module_timer";
     hash = "sha256-OWo1Ij9JAxsk9HlTlaz9Qw2+4YCvXDmIvytAOgFCLPI=";
-    meta.description =
-      "Ppx rewriter that records top-level module startup times";
+    meta.description = "Ppx rewriter that records top-level module startup times";
     propagatedBuildInputs = [ time_now ];
   };
 
@@ -1085,39 +1372,42 @@ with self;
     pname = "ppx_optional";
     hash = "sha256-SHw2zh6lG1N9zWF2b3VWeYzRHUx4jUxyOYgHd2/N9wE=";
     meta.description = "Pattern matching on flat options";
-    propagatedBuildInputs = [ ppxlib ppxlib_jane ];
+    propagatedBuildInputs = [
+      ppxlib
+      ppxlib_jane
+    ];
   };
 
   ppx_pattern_bind = janePackage {
     pname = "ppx_pattern_bind";
     hash = "sha256-IVDvFU9ERB2YFJOgP/glYcO4KhEH5VdQ7wCCfreboqA=";
-    meta.description =
-      "A ppx for writing fast incremental bind nodes in a pattern match";
+    meta.description = "A ppx for writing fast incremental bind nodes in a pattern match";
     propagatedBuildInputs = [ ppx_let ];
   };
 
   ppx_pipebang = janePackage {
     pname = "ppx_pipebang";
     hash = "sha256-GBa1zzNChZOQfVSHyUeDEMFxuNUT3lj/pIQi/l1J35M=";
-    meta.description =
-      "A ppx rewriter that inlines reverse application operators `|>` and `|!`";
+    meta.description = "A ppx rewriter that inlines reverse application operators `|>` and `|!`";
     propagatedBuildInputs = [ ppxlib ];
   };
 
   ppx_python = janePackage {
     pname = "ppx_python";
     hash = "sha256-WqTYH5Zz/vRak/CL1ha8oUbQ8+XRuUu9610uj8II74o=";
-    meta.description =
-      "A [@@deriving] plugin to generate Python conversion functions ";
-    propagatedBuildInputs = [ ppx_base ppxlib pyml ];
+    meta.description = "A [@@deriving] plugin to generate Python conversion functions ";
+    propagatedBuildInputs = [
+      ppx_base
+      ppxlib
+      pyml
+    ];
     doCheck = false; # test rules broken
   };
 
   ppx_quick_test = janePackage {
     pname = "ppx_quick_test";
     hash = "sha256-Kxb0IJcosC4eYlUjEfZE9FhY8o1/gDHHLWD5Cby5hXY=";
-    meta.description =
-      "Spiritual equivalent of let%expect_test, but for property based tests";
+    meta.description = "Spiritual equivalent of let%expect_test, but for property based tests";
     propagatedBuildInputs = [
       async
       async_kernel
@@ -1137,24 +1427,33 @@ with self;
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
     hash = "sha256-hUi0I50SODK1MpL86xy8eM8yn8f4q1Hv4LP9zFnnr70=";
-    meta.description =
-      "[@@deriving] plugin to generate S-expression conversion functions";
-    propagatedBuildInputs = [ ppxlib ppxlib_jane sexplib0 base ];
+    meta.description = "[@@deriving] plugin to generate S-expression conversion functions";
+    propagatedBuildInputs = [
+      ppxlib
+      ppxlib_jane
+      sexplib0
+      base
+    ];
   };
 
   ppx_sexp_message = janePackage {
     pname = "ppx_sexp_message";
     hash = "sha256-SNgTvsTUgFzjqHpyIYk4YuA4c5MbA9e77YUEsDaKTeA=";
     meta.description = "A ppx rewriter for easy construction of s-expressions";
-    propagatedBuildInputs = [ ppx_here ppx_sexp_conv ];
+    propagatedBuildInputs = [
+      ppx_here
+      ppx_sexp_conv
+    ];
   };
 
   ppx_sexp_value = janePackage {
     pname = "ppx_sexp_value";
     hash = "sha256-f96DLNFI+s3TKsOj01i6xUoM9L+qRgAXbbepNis397I=";
-    meta.description =
-      "A ppx rewriter that simplifies building s-expressions from ocaml values";
-    propagatedBuildInputs = [ ppx_here ppx_sexp_conv ];
+    meta.description = "A ppx rewriter that simplifies building s-expressions from ocaml values";
+    propagatedBuildInputs = [
+      ppx_here
+      ppx_sexp_conv
+    ];
   };
 
   ppx_stable = janePackage {
@@ -1167,70 +1466,92 @@ with self;
   ppx_stable_witness = janePackage {
     pname = "ppx_stable_witness";
     hash = "sha256-k45uR/OMPRsi5450CuUo592EVc82DPhO8TvBPjgJTh0=";
-    meta.description =
-      "Ppx extension for deriving a witness that a type is intended to be stable";
-    propagatedBuildInputs = [ base ppxlib ];
+    meta.description = "Ppx extension for deriving a witness that a type is intended to be stable";
+    propagatedBuildInputs = [
+      base
+      ppxlib
+    ];
   };
 
   ppx_string = janePackage {
     pname = "ppx_string";
     hash = "sha256-taAvJas9DvR5CIiFf38IMdNqLJ0QJmnIdcNJAaVILgA=";
     meta.description = "Ppx extension for string interpolation";
-    propagatedBuildInputs = [ ppx_base ppxlib stdio ];
+    propagatedBuildInputs = [
+      ppx_base
+      ppxlib
+      stdio
+    ];
   };
 
   ppx_string_conv = janePackage {
     pname = "ppx_string_conv";
     hash = "sha256-r+XubSXjxVyCsra99D6keJ/lmXeK5SZbI6h/IFghvPQ=";
-    meta.description =
-      "Ppx to help derive of_string and to_string, primarily for variant types";
-    propagatedBuildInputs = [ capitalization ppx_let ppx_string ];
+    meta.description = "Ppx to help derive of_string and to_string, primarily for variant types";
+    propagatedBuildInputs = [
+      capitalization
+      ppx_let
+      ppx_string
+    ];
   };
 
   ppx_tydi = janePackage {
     pname = "ppx_tydi";
     hash = "sha256-PM89fP6Rb6M99HgEzQ7LfpW1W5adw6J/E1LFQJtdd0U=";
-    meta.description =
-      "Let expressions, inferring pattern type from expression";
-    propagatedBuildInputs = [ base ppxlib ];
+    meta.description = "Let expressions, inferring pattern type from expression";
+    propagatedBuildInputs = [
+      base
+      ppxlib
+    ];
   };
 
   ppx_typed_fields = janePackage {
     pname = "ppx_typed_fields";
     hash = "sha256-aTPEBBc1zniZkEmzubGkU064bwGnefBOjVDqTdPm2w8=";
     meta.description = "GADT-based field accessors and utilities";
-    propagatedBuildInputs = [ core ppx_jane ppxlib ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      ppxlib
+    ];
   };
 
   ppx_typerep_conv = janePackage {
     pname = "ppx_typerep_conv";
     hash = "sha256-V9yOSy3cj5/bz9PvpO3J+aeFu1G+qGQ8AR3gSczUZbY=";
     meta.description = "Generation of runtime types from type declarations";
-    propagatedBuildInputs = [ ppxlib typerep ];
+    propagatedBuildInputs = [
+      ppxlib
+      typerep
+    ];
   };
 
   ppx_variants_conv = janePackage {
     pname = "ppx_variants_conv";
     hash = "sha256-Av2F699LzVCpwcdji6qG0jt5DVxCnIY4eBLaPK1JC10=";
-    meta.description =
-      "Generation of accessor and iteration functions for ocaml variant types";
-    propagatedBuildInputs = [ variantslib ppxlib ];
+    meta.description = "Generation of accessor and iteration functions for ocaml variant types";
+    propagatedBuildInputs = [
+      variantslib
+      ppxlib
+    ];
   };
 
   ppxlib_jane = janePackage {
     pname = "ppxlib_jane";
     hash = "sha256-8NC8CHh3pSdFuRDQCuuhc2xxU+84UAsGFJbbJoKwd0U=";
-    meta.description =
-      "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
+    meta.description = "A library for use in ppxes for constructing and matching on ASTs corresponding to the augmented parsetree";
     propagatedBuildInputs = [ ppxlib ];
   };
 
   profunctor = janePackage {
     pname = "profunctor";
     hash = "sha256-WYPJLt3kYvIzh88XcPpw2xvSNjNX63/LvWwIDK+Xr0Q=";
-    meta.description =
-      "A library providing a signature for simple profunctors and traversal of a record";
-    propagatedBuildInputs = [ base ppx_jane record_builder ];
+    meta.description = "A library providing a signature for simple profunctors and traversal of a record";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+      record_builder
+    ];
   };
 
   protocol_version_header = janePackage {
@@ -1243,9 +1564,12 @@ with self;
   re2 = janePackage {
     pname = "re2";
     hash = "sha256-0VCSOzrVouMRVZJumcqv0F+HQFXlFfVEFIhYq7Tfhrg=";
-    meta.description =
-      "OCaml bindings for RE2, Google's regular expression library";
-    propagatedBuildInputs = [ core_kernel jane_rope regex_parser_intf ];
+    meta.description = "OCaml bindings for RE2, Google's regular expression library";
+    propagatedBuildInputs = [
+      core_kernel
+      jane_rope
+      regex_parser_intf
+    ];
     prePatch = ''
       substituteInPlace src/re2_c/dune --replace 'CXX=g++' 'CXX=c++'
       substituteInPlace src/dune --replace '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2))' '(cxx_flags (:standard \ -pedantic) (-I re2_c/libre2) (-x c++))'
@@ -1256,24 +1580,34 @@ with self;
     pname = "re2_stable";
     version = "0.14.0";
     hash = "sha256-gyet2Pzn7ZIqQ+UP2J51pRmwaESY2LSGTqCMZZwDTE4=";
-    meta.description =
-      "Re2_stable adds an incomplete but stable serialization of Re2";
-    propagatedBuildInputs = [ core re2 ];
+    meta.description = "Re2_stable adds an incomplete but stable serialization of Re2";
+    propagatedBuildInputs = [
+      core
+      re2
+    ];
   };
 
   record_builder = janePackage {
     pname = "record_builder";
     hash = "sha256-NQ0Wizxi/wD8BCwt8hxZWnEpLBTn3XkaG+96ooOKIFE=";
-    meta.description =
-      "A library which provides traversal of records with an applicative";
-    propagatedBuildInputs = [ base ppx_jane ];
+    meta.description = "A library which provides traversal of records with an applicative";
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   redis-async = janePackage {
     pname = "redis-async";
     hash = "sha256-bwKPEnK2uJq5H65BDAL1Vk3qSr5kUwaCEiFsgaCdHw8=";
     meta.description = "Redis client for Async applications";
-    propagatedBuildInputs = [ async bignum core core_kernel ppx_jane ];
+    propagatedBuildInputs = [
+      async
+      bignum
+      core
+      core_kernel
+      ppx_jane
+    ];
   };
 
   regex_parser_intf = janePackage {
@@ -1294,7 +1628,11 @@ with self;
     pname = "semantic_version";
     hash = "sha256-2Z2C+1bfI6W7Pw7SRYw8EkaVVwQkkm+knCrJIfsJhPE=";
     meta.description = "Semantic versioning";
-    propagatedBuildInputs = [ core ppx_jane re ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      re
+    ];
   };
 
   sexp = janePackage {
@@ -1341,7 +1679,10 @@ with self;
   sexp_macro = janePackage {
     pname = "sexp_macro";
     hash = "sha256-KXJ+6uR38ywkr8uT8n2bWk10W7vW2ntMgxgF4ZvzzWU=";
-    propagatedBuildInputs = [ async sexplib ];
+    propagatedBuildInputs = [
+      async
+      sexplib
+    ];
     meta.description = "Sexp macros";
   };
 
@@ -1349,38 +1690,45 @@ with self;
     pname = "sexp_pretty";
     hash = "sha256-DcgLlwp3AMC1QzFYPzi7aHA+VhnhbG6p/fLDTMx8ATc=";
     meta.description = "S-expression pretty-printer";
-    propagatedBuildInputs = [ ppx_base re sexplib ];
+    propagatedBuildInputs = [
+      ppx_base
+      re
+      sexplib
+    ];
   };
 
   sexp_select = janePackage {
     pname = "sexp_select";
     hash = "sha256-3AUFRtNe32TEB7lItcu7XlEv+3k+4QTitcTnT0kg28Y=";
-    propagatedBuildInputs = [ base core_kernel ppx_jane ];
-    meta.description =
-      "A library to use CSS-style selectors to traverse sexp trees";
+    propagatedBuildInputs = [
+      base
+      core_kernel
+      ppx_jane
+    ];
+    meta.description = "A library to use CSS-style selectors to traverse sexp trees";
   };
 
   sexplib0 = janePackage {
     pname = "sexplib0";
     hash = "sha256-Q53wEhRet/Ou9Kr0TZNTyXT5ASQpsVLPz5n/I+Fhy+g=";
     minimalOCamlVersion = "4.14.0";
-    meta.description =
-      "Library containing the definition of S-expressions and some base converters";
+    meta.description = "Library containing the definition of S-expressions and some base converters";
   };
 
   sexplib = janePackage {
     pname = "sexplib";
     hash = "sha256-DxTMAQbskZ87pMVQnxYc3opGGCzmUKGCZfszr/Z9TGA=";
-    meta.description =
-      "Library for serializing OCaml values to and from S-expressions";
-    propagatedBuildInputs = [ num parsexp ];
+    meta.description = "Library for serializing OCaml values to and from S-expressions";
+    propagatedBuildInputs = [
+      num
+      parsexp
+    ];
   };
 
   shell = janePackage {
     pname = "shell";
     hash = "sha256-MJerTFLGrUaR3y3mnKVrH5EQHYBXZyuVL+n2wJZ9HoU=";
-    meta.description =
-      "Yet another implementation of fork&exec and related functionality";
+    meta.description = "Yet another implementation of fork&exec and related functionality";
     buildInputs = [ jst-config ];
     propagatedBuildInputs = [ textutils ];
     checkInputs = [ ounit ];
@@ -1389,7 +1737,10 @@ with self;
   shexp = janePackage {
     pname = "shexp";
     hash = "sha256-tf9HqZ01gMWxfcpe3Pl3rdPTPgIEdb59iwzwThznqAc=";
-    propagatedBuildInputs = [ posixat spawn ];
+    propagatedBuildInputs = [
+      posixat
+      spawn
+    ];
     meta.description = "Process library and s-expression based shell";
   };
 
@@ -1413,7 +1764,12 @@ with self;
     pname = "splittable_random";
     hash = "sha256-LlaCxL17GBZc33spn/JnunpaMQ47n+RXS8CShBlaRWA=";
     meta.description = "PRNG that can be split into independent streams";
-    propagatedBuildInputs = [ base ppx_assert ppx_bench ppx_sexp_message ];
+    propagatedBuildInputs = [
+      base
+      ppx_assert
+      ppx_bench
+      ppx_sexp_message
+    ];
   };
 
   stdio = janePackage {
@@ -1426,47 +1782,72 @@ with self;
   stored_reversed = janePackage {
     pname = "stored_reversed";
     hash = "sha256-FPyQxXaGAzFWW6GiiqKQgU+6/lAZhEQwhNnXsmqKkzg=";
-    meta.description =
-      "A library for representing a list temporarily stored in reverse order";
-    propagatedBuildInputs = [ core ppx_jane ];
+    meta.description = "A library for representing a list temporarily stored in reverse order";
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+    ];
   };
 
   streamable = janePackage {
     pname = "streamable";
     hash = "sha256-FtrAX4nsacCO5HTVxwLgwwT8R2sASJ05qu4gT2ZVSDg=";
-    meta.description =
-      "A collection of types suitable for incremental serialization";
-    propagatedBuildInputs =
-      [ async_kernel async_rpc_kernel base core core_kernel ppx_jane ppxlib ];
+    meta.description = "A collection of types suitable for incremental serialization";
+    propagatedBuildInputs = [
+      async_kernel
+      async_rpc_kernel
+      base
+      core
+      core_kernel
+      ppx_jane
+      ppxlib
+    ];
   };
 
   textutils = janePackage {
     pname = "textutils";
     hash = "sha256-J58sqp9fkx3JyjnH6oJLCyEC0ZvnuDfqLVl+dt3tEgA=";
     meta.description = "Text output utilities";
-    propagatedBuildInputs = [ core_unix textutils_kernel ];
+    propagatedBuildInputs = [
+      core_unix
+      textutils_kernel
+    ];
   };
 
   textutils_kernel = janePackage {
     pname = "textutils_kernel";
     hash = "sha256-B5ExbKMRSw4RVJ908FVGob2soHFnJ6Ajsdn0q8lDhio=";
     meta.description = "Text output utilities";
-    propagatedBuildInputs = [ core ppx_jane uutf ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+      uutf
+    ];
   };
 
   tilde_f = janePackage {
     pname = "tilde_f";
     hash = "sha256-tuddvOmhk0fikB4dHNdXamBx6xfo4DCvivs44QXp5RQ=";
     meta.description = "Provides a let-syntax for continuation-passing style";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   time_now = janePackage {
     pname = "time_now";
     hash = "sha256-bTPWE9+x+zmdLdzLc1naDlRErPZ8m4WXDJL2iLErdqk=";
     meta.description = "Reports the current time";
-    buildInputs = [ jst-config ppx_optcomp ];
-    propagatedBuildInputs = [ jane-street-headers base ppx_base ];
+    buildInputs = [
+      jst-config
+      ppx_optcomp
+    ];
+    propagatedBuildInputs = [
+      jane-street-headers
+      base
+      ppx_base
+    ];
   };
 
   timezone = janePackage {
@@ -1480,7 +1861,10 @@ with self;
     pname = "topological_sort";
     hash = "sha256-jLkJnh5lasrphI6BUKv7oVPrKyGqNm6VIGYthNs04iU=";
     meta.description = "Topological sort algorithm";
-    propagatedBuildInputs = [ ppx_jane stdio ];
+    propagatedBuildInputs = [
+      ppx_jane
+      stdio
+    ];
   };
 
   typerep = janePackage {
@@ -1494,14 +1878,20 @@ with self;
     pname = "uopt";
     hash = "sha256-t0SFJVF0ScyFFwziBZOYCOsmhRd6J5H3s0Kk9NKorcM=";
     meta.description = "An [option]-like type that incurs no allocation";
-    propagatedBuildInputs = [ base ppx_jane ];
+    propagatedBuildInputs = [
+      base
+      ppx_jane
+    ];
   };
 
   username_kernel = janePackage {
     pname = "username_kernel";
     hash = "sha256-1lxWSv7CbmucurNw8ws18N9DYqo4ik2KZBc5GtNmmeU=";
     meta.description = "An identifier for a user";
-    propagatedBuildInputs = [ core ppx_jane ];
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+    ];
   };
 
   variantslib = janePackage {
@@ -1531,10 +1921,14 @@ with self;
   versioned_polling_state_rpc = janePackage {
     pname = "versioned_polling_state_rpc";
     hash = "sha256-Ba+Pevc/cvvY9FnQ2oTUxTekxypVkEy4MfrpRKmJhZ0=";
-    meta.description =
-      "Helper functions for creating stable/versioned `Polling_state_rpc.t`s with babel";
-    propagatedBuildInputs =
-      [ async_rpc_kernel babel core polling_state_rpc ppx_jane ];
+    meta.description = "Helper functions for creating stable/versioned `Polling_state_rpc.t`s with babel";
+    propagatedBuildInputs = [
+      async_rpc_kernel
+      babel
+      core
+      polling_state_rpc
+      ppx_jane
+    ];
   };
 
   virtual_dom = janePackage {
@@ -1557,8 +1951,7 @@ with self;
   virtual_dom_toplayer = janePackage {
     pname = "virtual_dom_toplayer";
     hash = "sha256-trTSWzWsXkV4RtQvVCyXqJN5/wftaFuooaehNekP9H0=";
-    meta.description =
-      "OCaml bindings for the floating positioning library for 'toplevel' virtual dom components";
+    meta.description = "OCaml bindings for the floating positioning library for 'toplevel' virtual dom components";
     propagatedBuildInputs = [
       core
       js_of_ocaml_patches
@@ -1584,7 +1977,10 @@ with self;
     hash = "sha256-EUI7fnN8ZaM1l0RBsgSAMWO+VXA8VoCv/lO5kcj+j4E=";
     meta.description = "OCaml bindings to Zstandard";
     buildInputs = [ ppx_jane ];
-    propagatedBuildInputs = [ core_kernel ctypes zstd ];
+    propagatedBuildInputs = [
+      core_kernel
+      ctypes
+      zstd
+    ];
   };
-
 }
