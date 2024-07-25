@@ -10,7 +10,6 @@
 }@args:
 
 buildDunePackage (args // {
-  duneVersion = "3";
   inherit version buildInputs;
 
   inherit minimalOCamlVersion;
