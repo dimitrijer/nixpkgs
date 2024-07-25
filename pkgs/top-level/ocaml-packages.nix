@@ -751,7 +751,7 @@ let
 
     # Jane Street
     janePackage =
-      if lib.versionOlder "5.0" ocaml.version
+      if lib.versionOlder "5.1" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_17.nix {}
       else if lib.versionOlder "4.13.1" ocaml.version
       then callPackage ../development/ocaml-modules/janestreet/janePackage_0_16.nix {}
