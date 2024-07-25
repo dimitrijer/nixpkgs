@@ -18,8 +18,6 @@ buildDunePackage rec {
   pname = "bistro";
   version = "unstable-2024-05-17";
 
-  duneVersion = "3";
-
   src = fetchFromGitHub {
     owner = "pveber";
     repo = pname;
@@ -41,7 +39,7 @@ buildDunePackage rec {
     tyxml
   ];
 
-  minimalOCamlVersion = "4.12";
+  minimalOCamlVersion = "4.14";
 
   meta = {
     inherit (src.meta) homepage;
