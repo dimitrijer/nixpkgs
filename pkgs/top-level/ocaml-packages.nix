@@ -764,7 +764,7 @@ let
       else null;
 
     janeStreet =
-      if lib.versionOlder "5.0" ocaml.version
+      if lib.versionOlder "5.1" ocaml.version
       then import ../development/ocaml-modules/janestreet/0.17.nix
          {
            inherit self;
