@@ -15,7 +15,7 @@ buildDunePackage rec {
     sha256 = "sha256-Z2rOaiNGvVDbRwf5XfoNIcenQdrE3fxHnfzyi6Ki2Ic=";
   };
 
-  minimalOCamlVersion = "4.08";
+  minimalOCamlVersion = "4.14";
 
   propagatedBuildInputs = [ base ppx_sexp_conv ];
 
