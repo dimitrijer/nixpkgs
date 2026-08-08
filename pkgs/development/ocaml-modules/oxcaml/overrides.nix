@@ -32,12 +32,73 @@ let
   oxOpam = import ./opam-repository.nix { inherit fetchFromGitHub; };
   inherit (oxOpam) patchesFor;
   patchSets = import ./patch-sets.nix;
+
+  # The v0.18 Jane Street set, pinned to the upstream `oxcaml` branches. `self`
+  # is the final scope so the module's `with self;` cross-references resolve.
+  janeStreet = lib.recurseIntoAttrs (
+    import ../janestreet/0.18-oxcaml.nix {
+      self = final;
+      inherit lib patchesFor;
+    }
+  );
+
+  # OxCaml's Parsetree carries ~47 constructors beyond any stock OCaml release
+  # (unboxed literals, jkind annotations, quote/borrow expressions, ...).
+  # ppxlib's astlib redefines the Parsetree types with exact-equality
+  # constraints, so no unpatched ppxlib can build against it. oxopam ships
+  # ppxlib_ast.0.33.0+ox2 with a custom ast_999.ml mirroring OxCaml's Parsetree
+  # plus the wiring patches; ppxlib.0.33.0+ox2 uses the identical patch set.
+  #
+  # Unlike nixpkgs' single ppxlib derivation, ppxlib_ast is built separately and
+  # first. Both ppxlib and ppxlib_jane link against it, and the split is what
+  # keeps the graph acyclic: the v0.18 ppxlib_jane propagates ppxlib_ast, where
+  # the v0.17 one propagates ppxlib and would close a loop through ppxlib.
+  ppxlibSrc = fetchFromGitHub {
+    owner = "ocaml-ppx";
+    repo = "ppxlib";
+    rev = "1f788de67fd04d7e608376ac26ee57deeeb93fdd";
+    hash = "sha256-gryEqVTmTMnTYb1bPlGdWhCpoDUyrs4O3zEYkaau2rw=";
+  };
 in
 
 {
   ##############################################################################
   # Packages replaced wholesale by their oxopam recipe
   ##############################################################################
+
+  ppxlib_ast = final.buildDunePackage {
+    pname = "ppxlib_ast";
+    version = "0.33.0+ox2";
+    src = ppxlibSrc;
+    patches = patchesFor "ppxlib_ast/ppxlib_ast.0.33.0+ox2" patchSets.ppxlib_ast;
+    # dune records the full library closure in each installed dune-package, so
+    # everything named in (libraries ...) has to be propagated or downstream
+    # packages fail to resolve it.
+    propagatedBuildInputs = [
+      final.ocaml-compiler-libs
+      final.ppx_derivers
+      final.sexplib0
+      final.stdlib-shims
+    ];
+  };
+
+  ppxlib = final.buildDunePackage {
+    pname = "ppxlib";
+    version = "0.33.0+ox2";
+    src = ppxlibSrc;
+    patches = patchesFor "ppxlib/ppxlib.0.33.0+ox2" patchSets.ppxlib;
+    propagatedBuildInputs = [
+      final.ppxlib_ast
+      # oxopam's dune.patch links ppxlib_jane into ppxlib's src/, gen/ and
+      # traverse/ directories, so ppxlib_jane must build first. It only needs
+      # ppxlib_ast, so this stays acyclic.
+      final.ppxlib_jane
+      final.ocaml-compiler-libs
+      final.ppx_derivers
+      final.sexplib0
+      final.stdlib-shims
+    ];
+  };
 
   # The Jane Street ppx rewriters use Re.Pcre, which OxCaml's portability
   # checker rejects; the oxopam patches annotate the API @@ portable.
@@ -155,4 +216,15 @@ in
       broken = true;
     };
   });
+
+  ##############################################################################
+  # Jane Street
+  ##############################################################################
+
+  janePackage = final.callPackage ../janestreet/janePackage_0_18_oxcaml.nix { };
+  inherit janeStreet;
 }
+# mkOcamlPackages has already applied liftJaneStreet, which lifts the v0.17 set
+# into the scope. Re-applying it would be a no-op (`super` wins there), so the
+# v0.18 names are merged in here instead, where this overlay's layer wins.
+// janeStreet
