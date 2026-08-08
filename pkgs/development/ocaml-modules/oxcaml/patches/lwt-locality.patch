@@ -1,0 +1,42 @@
+# lwt 6.1.2 compatibility with OxCaml's locality-annotated Unix module:
+# Unix.recv/send/recvfrom/sendto take `bytes @ local`/`bytes @ local read`
+# and `msg_flag list @ local` in OxCaml, so the matching C-stub externals must
+# too (they unify in the `if Sys.win32 then Unix.X else stub_X` branches).
+--- a/src/unix/lwt_unix.cppo.ml
++++ b/src/unix/lwt_unix.cppo.ml
+@@ -1543,7 +1543,7 @@
+   | MSG_DONTROUTE
+   | MSG_PEEK
+ 
+-external stub_recv : Unix.file_descr -> Bytes.t -> int -> int -> Unix.msg_flag list -> int = "lwt_unix_recv"
++external stub_recv : Unix.file_descr -> Bytes.t @ local -> int -> int -> Unix.msg_flag list @ local -> int = "lwt_unix_recv"
+ 
+ let recv ch buf pos len flags =
+   if pos < 0 || len < 0 || pos > Bytes.length buf - len then
+@@ -1552,7 +1552,7 @@
+     let do_recv = if Sys.win32 then Unix.recv else stub_recv in
+     wrap_syscall Read ch (fun () -> do_recv ch.fd buf pos len flags)
+ 
+-external stub_send : Unix.file_descr -> Bytes.t -> int -> int -> Unix.msg_flag list -> int = "lwt_unix_send"
++external stub_send : Unix.file_descr -> Bytes.t @ local read -> int -> int -> Unix.msg_flag list @ local -> int = "lwt_unix_send"
+ 
+ let send ch buf pos len flags =
+   if pos < 0 || len < 0 || pos > Bytes.length buf - len then
+@@ -1561,7 +1561,7 @@
+     let do_send = if Sys.win32 then Unix.send else stub_send in
+     wrap_syscall Write ch (fun () -> do_send ch.fd buf pos len flags)
+ 
+-external stub_recvfrom : Unix.file_descr -> Bytes.t -> int -> int -> Unix.msg_flag list -> int * Unix.sockaddr = "lwt_unix_recvfrom"
++external stub_recvfrom : Unix.file_descr -> Bytes.t @ local -> int -> int -> Unix.msg_flag list @ local -> int * Unix.sockaddr = "lwt_unix_recvfrom"
+ 
+ let recvfrom ch buf pos len flags =
+   if pos < 0 || len < 0 || pos > Bytes.length buf - len then
+@@ -1570,7 +1570,7 @@
+     let do_recvfrom = if Sys.win32 then Unix.recvfrom else stub_recvfrom in
+     wrap_syscall Read ch (fun () -> do_recvfrom ch.fd buf pos len flags)
+ 
+-external stub_sendto : Unix.file_descr -> Bytes.t -> int -> int -> Unix.msg_flag list -> Unix.sockaddr -> int = "lwt_unix_sendto_byte" "lwt_unix_sendto"
++external stub_sendto : Unix.file_descr -> Bytes.t @ local read -> int -> int -> Unix.msg_flag list @ local -> Unix.sockaddr @ local -> int = "lwt_unix_sendto_byte" "lwt_unix_sendto"
+ 
+ let sendto ch buf pos len flags addr =
+   if pos < 0 || len < 0 || pos > Bytes.length buf - len then

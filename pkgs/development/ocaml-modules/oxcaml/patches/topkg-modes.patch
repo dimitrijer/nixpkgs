@@ -1,0 +1,15 @@
+# topkg 1.1.0 compatibility with OxCaml's mode system: the implementation's
+# Topkg.String (Topkg_string) is a default-mode (nonportable) module, while
+# `include module type of String` would expose Stdlib String's `@@ portable`
+# trim. Declare the String submodule as Topkg_string's type so the modes match.
+--- a/src/topkg.mli
++++ b/src/topkg.mli
+@@ -66,7 +66,7 @@
+ 
+   (** {1:adds String additions} *)
+ 
+-  include module type of String
++  include module type of Topkg_string
+ 
+   val head : string -> char option
+   (** [head s] if [Some s.[0]] if [s <> ""] and [None] otherwise. *)

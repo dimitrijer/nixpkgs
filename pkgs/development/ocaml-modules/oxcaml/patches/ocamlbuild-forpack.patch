@@ -1,0 +1,20 @@
+# ocamlbuild 0.16.1 compatibility with OxCaml: bytecode and native -pack
+# require units (and their .mli-derived .cmi files) to be compiled with
+# -for-pack; upstream OCaml 5.4.1 tolerates the mismatch, OxCaml does not.
+# The Makefile only had -for-pack on the native .cmx rule.
+diff --git a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -418,6 +418,12 @@
+ %.cmo: %.ml
+ 	$(OCAMLC) $(OCB_COMPFLAGS) -c $<
+ 
++src/%.cmo: src/%.ml
++	$(OCAMLC) -for-pack Ocamlbuild_pack $(OCB_COMPFLAGS) -c $<
++
++src/%.cmi: src/%.mli
++	$(OCAMLC) -for-pack Ocamlbuild_pack $(OCB_COMPFLAGS) -c $<
++
+ %.cmi: %.mli
+ 	$(OCAMLC) $(OCB_COMPFLAGS) -c $<
+ 

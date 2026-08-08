@@ -2438,6 +2438,20 @@ rec {
       unsafeStringSupport = true;
     }
   );
+
+  # OxCaml <https://oxcaml.org>, a performance-focused fork of OCaml. Every
+  # OxCaml-specific delta lives in the single overrideScope below, so this set
+  # cannot affect any of the vanilla ocamlPackages_* sets above.
+  #
+  # Only the closure documented in
+  # pkgs/development/ocaml-modules/oxcaml/README.md is supported; the rest of
+  # the scope has never been built against OxCaml.
+  ocamlPackages_oxcaml = (mkOcamlPackages pkgs.oxcaml).overrideScope (
+    import ../development/ocaml-modules/oxcaml/overrides.nix {
+      inherit lib;
+      inherit (pkgs) fetchFromGitHub;
+    }
+  );
 }
 // lib.optionalAttrs config.allowAliases {
   ocamlPackages_4_00_1 = throw "ocamlPackages_4_00_1 has been removed. Please use a newer version of OCaml.";

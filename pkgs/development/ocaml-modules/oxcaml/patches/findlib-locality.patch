@@ -1,0 +1,37 @@
+# findlib 1.9.8 compatibility with OxCaml's stdlib: OxCaml annotates
+# Stdlib.prerr_endline as `string @ local -> unit` and `ignore` is not
+# local-polymorphic, so topfind's log/exec_string must accept `string @ local`
+# (upstream OCaml 5.4.1 does not annotate prerr_endline this way, hence the
+# patch is only needed under OxCaml).
+diff --git a/src/findlib/topfind.ml.in b/src/findlib/topfind.ml.in
+--- a/src/findlib/topfind.ml.in
++++ b/src/findlib/topfind.ml.in
+@@ -22,7 +22,7 @@
+ let real_toploop =
+   !Sys.interactive;;
+ 
+-let log = ref (if real_toploop then prerr_endline else ignore)
++let log = ref (if real_toploop then prerr_endline else fun (_ : string @ local) -> ())
+ 
+ let rec remove_dups l =
+   match l with
+@@ -52,7 +52,8 @@
+   end
+ ;;
+ 
+-let exec_string s =
++let exec_string (s : string @ local) =
++  let s = Bytes.unsafe_to_string (Bytes.of_string s) in
+   let l = Lexing.from_string s in
+   let ph = !Toploop.parse_toplevel_phrase l in
+ (* PPXOPT_BEGIN *)
+diff --git a/src/findlib/topfind.mli b/src/findlib/topfind.mli
+--- a/src/findlib/topfind.mli
++++ b/src/findlib/topfind.mli
+@@ -118,7 +118,7 @@
+ val announce : unit -> unit
+   (** Output the startup message *)
+ 
+-val log : (string -> unit) ref
++val log : (string @ local -> unit) ref
+   (** Function used to log messages from this module. *)
