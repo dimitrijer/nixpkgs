@@ -23,9 +23,38 @@ these packages are **not** in the binary cache. The compiler itself
 
 ### Known to build
 
+Toolchain and third-party libraries:
+
     dune_3  findlib  ocamlbuild  ocaml-compiler-libs
-    alcotest  lwt  qcheck  qcheck-core  qcheck-ounit
-    re  topkg  uutf  yojson  zarith
+    alcotest  gen_js_api  js_of_ocaml  js_of_ocaml-compiler  js_of_ocaml-ppx
+    lwt  notty-community  ppxlib  ppxlib_ast  qcheck  qcheck-core
+    qcheck-ounit  re  sedlex  topkg  uutf  yojson  zarith
+
+Jane Street (`oxcamlPackages.janeStreet`, also lifted to the top of the scope):
+
+    async  base  bignum  bonsai  bonsai_term  core  core_kernel  core_unix
+    notty_async  ppx_jane  ppxlib_jane  spawn  textutils  textutils_kernel
+    virtual_dom
+
+The rest of the 119-package Jane Street set is defined in
+`../janestreet/0.18-oxcaml.nix` and is expected to work — it is the same set the
+upstream `oxcaml` branches ship — but only the packages above have actually been
+built here.
+
+### End-to-end
+
+A `bonsai_term` application builds against this scope with no overlays:
+
+```nix
+mkShell {
+  buildInputs = with oxcamlPackages; [
+    ocaml dune_3 findlib bonsai bonsai_term core async core_unix ppx_jane
+  ];
+}
+```
+
+`ppx_bonsai` is not a separate package; it is the `bonsai.ppx_bonsai` sublibrary,
+so depending on `bonsai` is enough to use `(preprocess (pps bonsai.ppx_bonsai))`.
 
 ### Known broken
 

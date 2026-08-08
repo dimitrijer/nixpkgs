@@ -59,6 +59,13 @@ let
     rev = "1f788de67fd04d7e608376ac26ee57deeeb93fdd";
     hash = "sha256-gryEqVTmTMnTYb1bPlGdWhCpoDUyrs4O3zEYkaau2rw=";
   };
+
+  jsOfOCamlSrc = fetchFromGitHub {
+    owner = "ocsigen";
+    repo = "js_of_ocaml";
+    rev = "930c6b7f4126eff48cef94d5dd30d1078821eb62";
+    hash = "sha256-eVMboI/olC181tIAI3v5dpUpQXmGrYbKCZoQ9+IAu3Y=";
+  };
 in
 
 {
@@ -116,9 +123,108 @@ in
     propagatedBuildInputs = [ final.seq ];
   };
 
+  # All three js_of_ocaml packages come from one commit with one patch set each;
+  # only the position of dune.patch differs between them. virtual_dom (and so
+  # bonsai_term) needs them, and the oxcaml-branched Jane Street stack was built
+  # against these versions.
+  js_of_ocaml-compiler = final.buildDunePackage {
+    pname = "js_of_ocaml-compiler";
+    version = "6.3.2+ox";
+    src = jsOfOCamlSrc;
+    patches = patchesFor "js_of_ocaml-compiler/js_of_ocaml-compiler.6.3.2+ox" patchSets.js_of_ocaml_compiler;
+    nativeBuildInputs = [ final.menhir ];
+    buildInputs = [
+      final.cmdliner
+      final.ppxlib
+    ];
+    propagatedBuildInputs = [
+      final.menhirLib
+      final.yojson
+      final.findlib
+      final.sedlex
+    ];
+  };
+
+  js_of_ocaml = final.buildDunePackage {
+    pname = "js_of_ocaml";
+    version = "6.3.2+ox";
+    src = jsOfOCamlSrc;
+    patches = patchesFor "js_of_ocaml/js_of_ocaml.6.3.2+ox" patchSets.js_of_ocaml;
+    buildInputs = [ final.ppxlib ];
+    propagatedBuildInputs = [ final.js_of_ocaml-compiler ];
+  };
+
+  js_of_ocaml-ppx = final.buildDunePackage {
+    pname = "js_of_ocaml-ppx";
+    version = "6.3.2+ox";
+    src = jsOfOCamlSrc;
+    patches = patchesFor "js_of_ocaml-ppx/js_of_ocaml-ppx.6.3.2+ox" patchSets.js_of_ocaml_ppx;
+    # js_of_ocaml is a ppx_runtime_dep here, so it has to be propagated or
+    # bonsai's effects library fails to resolve it.
+    propagatedBuildInputs = [
+      final.js_of_ocaml
+      final.ppxlib
+    ];
+  };
+
+  gen_js_api = final.buildDunePackage {
+    pname = "gen_js_api";
+    version = "1.1.2+ox";
+    src = fetchFromGitHub {
+      owner = "LexiFi";
+      repo = "gen_js_api";
+      rev = "2c72798f19cdff89c72b595371cdf8010d457f6a"; # v1.1.2
+      hash = "sha256-tplbnQ/1dzZq8m/ibMAkGqY8RHQRmBPHOwh0dGuZCJM=";
+    };
+    patches = patchesFor "gen_js_api/gen_js_api.1.1.2+ox" patchSets.gen_js_api;
+    doCheck = false; # the expect tests encode pre-patch output
+    propagatedBuildInputs = [
+      final.ojs
+      final.ppxlib
+    ];
+    # nixpkgs' ojs inherits gen_js_api.meta, so this has to be a full attrset.
+    meta = {
+      description = "Easy OCaml bindings for JavaScript libraries";
+      homepage = "https://github.com/LexiFi/gen_js_api";
+      license = lib.licenses.mit;
+      maintainers = [ ];
+    };
+  };
+
   ##############################################################################
   # Existing packages that only need the oxopam patches applied
   ##############################################################################
+
+  # ppx_sedlex reads the Parsetree directly; OxCaml changed Ppat_tuple (it now
+  # carries a closed flag and labelled tuples) and Exp.fun_.
+  sedlex = prev.sedlex.overrideAttrs (old: {
+    patches = (old.patches or [ ]) ++ patchesFor "sedlex/sedlex.3.7+ox" patchSets.sedlex;
+  });
+
+  # Jane Street's notty_async needs Tmachine.set_mouse, dynamic mouse reporting
+  # and hover events, none of which are in the release tarball nixpkgs builds.
+  # oxopam patches the git revision below, which already uses Base.
+  notty-community = prev.notty-community.overrideAttrs (old: {
+    src = fetchFromGitHub {
+      owner = "ocaml-community";
+      repo = "notty-community";
+      rev = "f9f3621ce566a682ba0cddf4930a3932a4b74652";
+      hash = "sha256-bvtDJxga0G30erHC7fmaQkMStX0HXygkKWHG9sFVq8M=";
+    };
+    patches = patchesFor "notty-community/notty-community.0.2.4+ox2" (
+      # The remaining patch does not apply against this revision; its intent is
+      # already covered by the mouse-reporting patches above it.
+      lib.filter (
+        p: p != "notty-defensively-ignore-corrupted-x10-vscode-mouse-codes.patch"
+      ) patchSets.notty_community
+    );
+    propagatedBuildInputs = (old.propagatedBuildInputs or [ ]) ++ [
+      final.base
+      final.portable
+      final.portable_lockfree_htbl
+      final.ppx_jane
+    ];
+  });
 
   # Uutf.String.fold_utf_8 has to accept a local_ folder for textutils, and its
   # internal tables are contended under OxCaml's portability checking.
