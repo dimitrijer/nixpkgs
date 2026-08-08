@@ -49,6 +49,27 @@ with self;
     ];
   };
 
+  async_js = janePackage {
+    pname = "async_js";
+    rev = "0e65806905bfd6c8fe31bc7ddd9e81a431d32d2a";
+    hash = "sha256-9sc9gVhhiAnIFVUou9aOIxjAt+ZjfNyNvHWuJuCef28=";
+    meta.description = "async_js";
+    # The cram test runs the compiled JS under `node`, which is not available in
+    # the build sandbox.
+    doCheck = false;
+    propagatedBuildInputs = [
+      async_kernel
+      async_rpc_kernel
+      core
+      js_of_ocaml
+      js_of_ocaml-ppx
+      ppx_expect
+      ppx_jane
+      uri
+      uri-sexp
+    ];
+  };
+
   async_kernel = janePackage {
     pname = "async_kernel";
     rev = "69bd328f770d136faaf377622f84ae48d14a043c";
@@ -255,9 +276,13 @@ with self;
       ppx_pattern_bind
       ppxlib_jane
       virtual_dom
+      # bonsai.kernel_components.effects links js_of_ocaml, and js_of_ocaml-ppx
+      # carries it as a ppx_runtime_dep, so both have to be propagated or
+      # consumers fail with `Library "js_of_ocaml" not found`.
+      js_of_ocaml
+      js_of_ocaml-ppx
     ];
     buildInputs = [
-      js_of_ocaml-ppx
       ppxlib
     ];
   };
@@ -295,6 +320,87 @@ with self;
     ];
     buildInputs = [
       notty-community
+    ];
+  };
+
+  bonsai_term_components = janePackage {
+    pname = "bonsai_term_components";
+    rev = "92760248f9d560682579bebecb2b1b773f13d13d";
+    hash = "sha256-/QOm9+I2eKIQmiBsZLKGGZandMTe6KoSxy4xWkTUhYA=";
+    meta.description = "bonsai_term_components";
+    propagatedBuildInputs = [
+      async
+      base64
+      bonsai
+      bonsai_concrete
+      bonsai_term
+      core
+      core_kernel
+      core_unix
+      expectree
+      jane_term_types
+      patdiff
+      pending_or_error
+      ppx_delta_types
+      ppx_expect
+      ppx_jane
+      react
+      sexplib
+      tmux
+      vec
+    ];
+  };
+
+  bonsai_term_test = janePackage {
+    pname = "bonsai_term_test";
+    rev = "500cd5a65e406f41f5bf8df316ce6d30656df96f";
+    hash = "sha256-DK9X6i22wusbvLudccDlDTllthmZ92MCzk60FUDMzco=";
+    meta.description = "bonsai_term_test";
+    propagatedBuildInputs = [
+      async
+      bonsai
+      bonsai_term
+      bonsai_term_components
+      bonsai_test
+      core
+      expect_test_helpers_core
+      expectable
+      notty-community
+      notty_async
+      patdiff
+      ppx_jane
+      ppx_quick_test
+      ppx_with
+      re
+    ];
+  };
+
+  bonsai_test = janePackage {
+    pname = "bonsai_test";
+    rev = "63f73007dd003b9af9c826c6522bfa9830e48929";
+    hash = "sha256-NumPl+5c+tTw5pBy0cpLxFBXki8th2nmQ1DK4VnTdEw=";
+    meta.description = "bonsai_test";
+    propagatedBuildInputs = [
+      async
+      async_js
+      base
+      bonsai
+      bonsai_concrete
+      core
+      core_unix
+      expect_test_helpers_base
+      expect_test_helpers_core
+      expectable
+      incr_map
+      incremental
+      ocaml-embed-file
+      patdiff
+      ppx_expect
+      ppx_jane
+      ppx_pattern_bind
+      ppx_quick_test
+      re
+      virtual_dom
     ];
   };
 
@@ -446,6 +552,21 @@ with self;
     ];
   };
 
+  expect_test_helpers_async = janePackage {
+    pname = "expect_test_helpers_async";
+    rev = "358d1f503f8aaa62107525694eed7961779d5509";
+    hash = "sha256-Cd29x+XEkU2m4DkdxS3vowJVvD+zYApqIEZ7kat1iQ0=";
+    meta.description = "expect_test_helpers_async";
+    propagatedBuildInputs = [
+      async
+      core
+      core_unix
+      expect_test_helpers_core
+      ppx_jane
+      sexp_pretty
+    ];
+  };
+
   expect_test_helpers_base = janePackage {
     pname = "expect_test_helpers_base";
     rev = "caaba6d8f791dccdd24a844a1378b27338e14a21";
@@ -475,6 +596,31 @@ with self;
       ppx_jane
       re
       sexp_pretty
+    ];
+  };
+
+  expectable = janePackage {
+    pname = "expectable";
+    rev = "fd9413638f591f50d9fc561904c1fcf2a13e7b12";
+    hash = "sha256-gxVOy2DTjPiUUqHPHY+/jNqEjbgATPva+mBzLk4MUk0=";
+    meta.description = "expectable";
+    propagatedBuildInputs = [
+      base
+      core
+      ppx_jane
+      textutils
+    ];
+  };
+
+  expectree = janePackage {
+    pname = "expectree";
+    rev = "feb430bade693d2c133cf7eb6975ffee818ecd5d";
+    hash = "sha256-u3RRvfAp1zWp02WyxT8TOcFqIT3BNbFLWaR0S7dWhok=";
+    meta.description = "expectree";
+    propagatedBuildInputs = [
+      base
+      core
+      ppx_jane
     ];
   };
 
@@ -575,6 +721,17 @@ with self;
     rev = "f9495480c1c13cacd6adf610395607c31ef2b32c";
     hash = "sha256-9LQB9XR26fxM+9QB8myfiWvHR4XPzU/GBwo4vtw5hXU=";
     meta.description = "jane-street-headers";
+  };
+
+  jane_term_types = janePackage {
+    pname = "jane_term_types";
+    rev = "f5e05a27ede9f71baccb193fe1b0d6665ac89fca";
+    hash = "sha256-tsBV7WQm2VKIJYsyEmPzLOBDG18dHRAr101wvn0gBvE=";
+    meta.description = "jane_term_types";
+    propagatedBuildInputs = [
+      core
+      ppx_jane
+    ];
   };
 
   janestreet_lru_cache = janePackage {
@@ -683,6 +840,53 @@ with self;
       ppx_sexp_conv
       sexplib0
       unique
+    ];
+  };
+
+  patdiff = janePackage {
+    pname = "patdiff";
+    rev = "41af3f61279a29b21294bac74112a8ef10518614";
+    hash = "sha256-IyJ3v6ABRLPq/btTPES+mc+sKBrtr9rmNYCKgXo3LJI=";
+    meta.description = "patdiff";
+    # The cram tests shell out to a `visible_colors` helper that is not built by
+    # `dune build -p patdiff`, so every colour test reports `command not found`.
+    doCheck = false;
+    propagatedBuildInputs = [
+      angstrom
+      base
+      core
+      core_extended
+      core_kernel
+      core_unix
+      expect_test_helpers_base
+      patience_diff
+      ppx_jane
+      re
+      uucp
+    ];
+  };
+
+  patience_diff = janePackage {
+    pname = "patience_diff";
+    rev = "9db2f0991d9656c8d4121e520864adcebaf205e0";
+    hash = "sha256-K2oz9eO7RRpwBgOEG7SOEOH7zR9erLScjd+djNaxA9g=";
+    meta.description = "patience_diff";
+    propagatedBuildInputs = [
+      base
+      core
+      ppx_jane
+    ];
+  };
+
+  pending_or_error = janePackage {
+    pname = "pending_or_error";
+    rev = "5e6d31576ccb36aeee0ae2097666d3b8bff8cb0b";
+    hash = "sha256-UXF1ScbSUizlSBSulwHQrIcx0nqauRnGXmFG9wUKVsI=";
+    meta.description = "pending_or_error";
+    propagatedBuildInputs = [
+      core
+      ppx_diff
+      ppx_jane
     ];
   };
 
@@ -884,6 +1088,20 @@ with self;
     ];
   };
 
+  ppx_delta_types = janePackage {
+    pname = "ppx_delta_types";
+    rev = "545e2372e2811ce05b6ba9cf91f699154701790b";
+    hash = "sha256-dnwPYBxWXJnpecI9a7+uSRZyn7obvlNYDyitLKIrNAE=";
+    meta.description = "ppx_delta_types";
+    propagatedBuildInputs = [
+      base
+      core
+      ppx_jane
+      ppx_stable
+      ppxlib
+    ];
+  };
+
   ppx_diff = janePackage {
     pname = "ppx_diff";
     rev = "984fcbc0f32429e263f17e8327e3ca875a253183";
@@ -988,6 +1206,19 @@ with self;
     ];
     buildInputs = [
       ppxlib
+    ];
+  };
+
+  ppx_for_loop = janePackage {
+    pname = "ppx_for_loop";
+    rev = "d5fb4b9405e628b7779afa37b20347be9a687af6";
+    hash = "sha256-A3XKfVim9T2/3laLnkDpfAe5nL8FBjNudAeEqShiciQ=";
+    meta.description = "ppx_for_loop";
+    propagatedBuildInputs = [
+      base
+      ppxlib
+      ppxlib_jane
+      unboxed
     ];
   };
 
@@ -1302,6 +1533,33 @@ with self;
     ];
   };
 
+  ppx_quick_test = janePackage {
+    pname = "ppx_quick_test";
+    rev = "20ac4a4bc6a44edf2a105db2b73946504bb0f723";
+    hash = "sha256-F+iLl6EDAs1dDZ9Fkfjj6ef8xj+DW+NcDkwpIwQRLm0=";
+    meta.description = "ppx_quick_test";
+    propagatedBuildInputs = [
+      async
+      async_kernel
+      base
+      base_quickcheck
+      core
+      expect_test_helpers_async
+      expect_test_helpers_base
+      ocaml-compiler-libs
+      ppx_expect
+      ppx_helpers
+      ppx_here
+      ppx_inline_test
+      ppx_jane
+      ppx_sexp_conv
+      ppx_sexp_message
+      ppxlib
+      ppxlib_jane
+      stdio
+    ];
+  };
+
   ppx_sexp_conv = janePackage {
     pname = "ppx_sexp_conv";
     rev = "18236defe35c20191db2dd50aa35a11718155962";
@@ -1310,11 +1568,11 @@ with self;
     propagatedBuildInputs = [
       basement
       ppx_helpers
+      # ppx_sexp_conv's dune-package requires ppxlib, so consumers (uri-sexp,
+      # ...) fail with `Library "ppxlib" not found` unless it is propagated.
+      ppxlib
       ppxlib_jane
       sexplib0
-    ];
-    buildInputs = [
-      ppxlib
     ];
   };
 
@@ -1524,6 +1782,18 @@ with self;
     ];
   };
 
+  ppx_with = janePackage {
+    pname = "ppx_with";
+    rev = "fb8e18626e7751b4863653725938e297f17f05e3";
+    hash = "sha256-4G2peuQH6F46vnkSXTEA4XBeOUilh2tnNbsQ5sEBjjo=";
+    meta.description = "ppx_with";
+    propagatedBuildInputs = [
+      base
+      ppxlib
+      ppxlib_jane
+    ];
+  };
+
   ppxlib_jane = janePackage {
     pname = "ppxlib_jane";
     rev = "52e90008fbdc22fc0f880aa827faf10257a9b2a6";
@@ -1707,8 +1977,8 @@ with self;
       core_kernel
       core_unix
       ppx_jane
-    ];
-    buildInputs = [
+      # textutils.ascii_table_kernel links uutf, so it has to be propagated or
+      # consumers fail with `Library "uutf" not found`.
       uutf
     ];
   };
@@ -1735,6 +2005,20 @@ with self;
       jane-street-headers
       jst-config
       ppx_optcomp
+    ];
+  };
+
+  tmux = janePackage {
+    pname = "tmux";
+    rev = "f1f23eff14d065fa566bc08d1c632942f3626213";
+    hash = "sha256-Q3zXd1+PT35kZ7/lgFDllyUh6RN6tptjphY2U8vw+2c=";
+    meta.description = "tmux";
+    propagatedBuildInputs = [
+      async
+      core
+      core_unix
+      jane_term_types
+      ppx_jane
     ];
   };
 
@@ -1824,6 +2108,20 @@ with self;
     meta.description = "variantslib";
     propagatedBuildInputs = [
       base
+    ];
+  };
+
+  vec = janePackage {
+    pname = "vec";
+    rev = "f8a9c56c7591138851a26b24d748f19d25540d3b";
+    hash = "sha256-40mkxT6JGewZfHU5+XntEK4Poh3OI/c6Idd5FSINUvY=";
+    meta.description = "vec";
+    propagatedBuildInputs = [
+      core
+      ppx_for_loop
+      ppx_jane
+      ppx_stable_witness
+      unboxed
     ];
   };
 
