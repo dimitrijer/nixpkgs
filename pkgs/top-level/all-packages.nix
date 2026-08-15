@@ -3951,6 +3951,12 @@ with pkgs;
   ocamlPackages = recurseIntoAttrs ocaml-ng.ocamlPackages;
   ocamlPackages_latest = recurseIntoAttrs ocaml-ng.ocamlPackages_latest;
 
+  # dontRecurseIntoAttrs rather than just omitting recurseIntoAttrs: the scope
+  # inherits recurseForDerivations from mkOcamlPackages, so leaving it off is
+  # not enough. Most of this scope has never been built against OxCaml. The
+  # compiler itself (pkgs.oxcaml) is a top-level attribute and is built by Hydra.
+  oxcamlPackages = dontRecurseIntoAttrs ocaml-ng.ocamlPackages_oxcaml;
+
   ocaml-crunch = ocamlPackages.crunch.bin;
 
   inherit (ocaml-ng.ocamlPackages_4_14)
