@@ -1,0 +1,18 @@
+# yojson 3.0.0 compatibility with OxCaml's locality-annotated stdlib:
+# Buffer.add_string is `t @ local -> string @ local -> unit` in OxCaml;
+# wrap it (instead of aliasing) so the binding keeps the mli's non-local type.
+--- a/lib/write.ml
++++ b/lib/write.ml
+@@ -188,9 +188,9 @@
+ 
+ let write_std_float_prec = write_float_prec
+ 
+-let write_intlit = Buffer.add_string
+-let write_floatlit = Buffer.add_string
+-let write_stringlit = Buffer.add_string
++let write_intlit buf s = Buffer.add_string buf s
++let write_floatlit buf s = Buffer.add_string buf s
++let write_stringlit buf s = Buffer.add_string buf s
+ 
+ let rec iter2_aux f_elt f_sep x = function
+     [] -> ()

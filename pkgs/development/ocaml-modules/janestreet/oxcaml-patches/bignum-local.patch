@@ -1,0 +1,11 @@
+--- a/src/bignum.ml
++++ b/src/bignum.ml
+@@ -60,8 +60,6 @@
+ 
+   let globalize x = globalize x
+   let equal = [%compare.equal: Zarith.Q.t]
+-  let%template[@mode local] equal = equal
+-  let%template[@mode local] compare = compare
+ 
+   let t_sexp_grammar : t Sexplib.Sexp_grammar.t =
+     let plus_character : Sexplib.Sexp_grammar.grammar =

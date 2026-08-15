@@ -1,0 +1,46 @@
+Port the two Typedtree matches from 5.2.0minus-39 to 5.2.0minus-40.
+
+oxcaml/ocaml-lsp only has a 5.2.0minus-39 branch, and ocaml-lsp destructures
+merlin's Typedtree directly, so it does not build against a later release.
+Only two of the constructors it names changed shape in minus-40:
+
+  Tpat_record     gained record_sorts and record_representation, so the arity
+                  goes 2 -> 4: (fields, sorts, repr, closed_flag).
+
+  Texp_construct  gained constructor_representation and its argument list
+                  became (Jkind.sort * expression) list, so the arity goes
+                  4 -> 5 and each argument is now a pair.
+
+Neither site cares about the added information -- one is looking for a record
+field bound to a variable, the other for the `Some` that desugaring inserts
+around an optional argument -- so both stay wildcards.
+
+The compiler cannot be pinned back to minus-39 to avoid this: external/merlin
+disagrees with typing/ on every commit of that line while sharing its magic
+number, which makes merlin segfault rather than report a mismatch. See the
+comment in pkgs/by-name/ox/oxcaml/package.nix.
+
+--- a/ocaml-lsp-server/src/action_mark_remove_unused.ml
++++ b/ocaml-lsp-server/src/action_mark_remove_unused.ml
+@@ -67,7 +67,7 @@
+    Returns an edit that silences the 'unused value' warning. *)
+ let rec mark_value_unused_edit name contexts =
+   match contexts with
+-  | Browse_raw.Pattern { pat_desc = Tpat_record (pats, _); _ } :: cs ->
++  | Browse_raw.Pattern { pat_desc = Tpat_record (pats, _, _, _); _ } :: cs ->
+     let m_field_edit =
+       List.find_map
+         pats
+--- a/ocaml-lsp-server/src/action_inline.ml
++++ b/ocaml-lsp-server/src/action_inline.ml
+@@ -303,7 +303,9 @@
+               Texp_construct
+                 ( _
+                 , _
+-                , [ { exp_desc = Texp_ident { path = Pident id; lid = { loc; _ }; _ }; _ } ]
++                , _
++                , [ (_, { exp_desc = Texp_ident { path = Pident id; lid = { loc; _ }; _ }; _ })
++                  ]
+                 , _ )
+           ; _
+           } )
