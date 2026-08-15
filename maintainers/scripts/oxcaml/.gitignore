@@ -1,0 +1,9 @@
+# GC roots for everything the triage builds. Keeping these is what stops a
+# garbage collection from deleting the compiler mid-run; see oxcaml-triage.py.
+gcroots/
+
+# Derived from the scope by `oxcaml-triage.py eval` and `graph`. Regenerate
+# rather than review; only results.json is a record worth keeping.
+candidates.json
+graph.json
+eval-failures.json
