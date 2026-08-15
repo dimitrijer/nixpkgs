@@ -2436,15 +2436,54 @@ rec {
   # OxCaml-specific delta lives in the single overrideScope below, so this set
   # cannot affect any of the vanilla ocamlPackages_* sets above.
   #
-  # Only the closure documented in
-  # pkgs/development/ocaml-modules/oxcaml/README.md is supported; the rest of
-  # the scope has never been built against OxCaml.
-  ocamlPackages_oxcaml = (mkOcamlPackages pkgs.oxcaml).overrideScope (
-    import ../development/ocaml-modules/oxcaml/overrides.nix {
-      inherit lib;
-      inherit (pkgs) fetchFromGitHub makeWrapper;
-    }
-  );
+  # Only a small part of this scope has ever been built against OxCaml -- see
+  # ../development/ocaml-modules/oxcaml/supported.nix, and the README beside it.
+  # Everything else still resolves and still builds, but warns first, so that
+  # reaching for an unported package is a deliberate act rather than a silent
+  # one. Use `oxcamlPackages.untested` to opt out of the warning.
+  ocamlPackages_oxcaml =
+    let
+      full = (mkOcamlPackages pkgs.oxcaml).overrideScope (
+        import ../development/ocaml-modules/oxcaml/overrides.nix {
+          inherit lib;
+          inherit (pkgs) fetchFromGitHub makeWrapper;
+        }
+      );
+
+      supported = import ../development/ocaml-modules/oxcaml/supported.nix;
+
+      # Names the scope has that supported.nix does not vouch for.
+      unsupported = lib.subtractLists supported (lib.attrNames full);
+
+      # ... and the reverse, which is a mistake in supported.nix rather than a
+      # fact about the scope. Only meaningful with aliases enabled: dune_3 is
+      # an alias here, so it legitimately disappears when they are off.
+      absent = lib.subtractLists (lib.attrNames full) supported;
+    in
+    assert lib.assertMsg (!config.allowAliases || absent == [ ]) (
+      "pkgs/development/ocaml-modules/oxcaml/supported.nix names attributes that"
+      + " ocamlPackages_oxcaml does not have: ${lib.concatStringsSep ", " absent}"
+    );
+    # Deliberately a plain `//` on the finished scope, and NOT another
+    # overrideScope. The warning has to be visible to whoever reads an
+    # attribute off this set, without becoming part of the fixpoint the
+    # packages themselves resolve against -- every supported package depends on
+    # unsupported ones (bonsai on incr_map, ocamlformat-lib on fpath and uuseg,
+    # ...), so folding these values back into the scope would make each of them
+    # warn about its own dependency closure, dozens of times over.
+    full
+    // lib.genAttrs unsupported (
+      name:
+      lib.warn (
+        "oxcamlPackages.${name} has never been built against OxCaml and may fail to"
+        + " build or misbehave. See pkgs/development/ocaml-modules/oxcaml/README.md;"
+        + " use oxcamlPackages.untested.${name} to silence this."
+      ) full.${name}
+    )
+    // {
+      # The same scope with nothing wrapped, for deliberate use.
+      untested = full;
+    };
 }
 // lib.optionalAttrs config.allowAliases {
   ocamlPackages_4_00_1 = throw "ocamlPackages_4_00_1 has been removed. Please use a newer version of OCaml.";

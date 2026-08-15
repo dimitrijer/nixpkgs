@@ -11,11 +11,32 @@ do not build at all.
 
 ## Scope of support
 
-**Only the packages listed below are known to build.** The scope inherits ~1000
+**Only the packages listed below are known to build.** The scope inherits ~1250
 package definitions from `pkgs/top-level/ocaml-packages.nix`, and the vast
-majority of them have never been built against OxCaml. Do not assume an
-arbitrary `oxcamlPackages.<foo>` works; if you try one and it builds, please add
-it to this list.
+majority of them have never been built against OxCaml.
+
+This is enforced, not just documented. The list below is mirrored in
+[`./supported.nix`](./supported.nix), and anything outside it warns when you
+reach for it:
+
+    $ nix-build -A oxcamlPackages.cohttp
+    evaluation warning: oxcamlPackages.cohttp has never been built against
+    OxCaml and may fail to build or misbehave. [...]
+
+The build still proceeds — the warning marks unported packages without putting a
+wall in front of experimenting with them. If you try one and it works, add it to
+`./supported.nix` *and* to the list below; the two are kept in sync by an
+assertion, so a name in one and not the other is an eval error.
+
+`oxcamlPackages.untested` is the same scope with nothing wrapped, for when you
+have decided you want an unported package and would rather not hear about it
+again.
+
+Four things are deliberately **not** guarded, because a wrapper on the finished
+scope cannot reach inside it: `callPackage` and `newScope` fill their arguments
+from the unwrapped scope, `overrideScope` rebuilds from the original definitions,
+and `janeStreet` is left whole (see below). Use them knowing the warning will not
+fire.
 
 The set is deliberately not `recurseIntoAttrs`, so Hydra does not walk it and
 these packages are **not** in the binary cache. The compiler itself
@@ -42,14 +63,29 @@ and the pieces of ocaml-lsp's closure the scope did not already carry:
 
 Jane Street (`oxcamlPackages.janeStreet`, also lifted to the top of the scope):
 
-    async  base  bignum  bonsai  bonsai_term  core  core_kernel  core_unix
-    notty_async  ppx_jane  ppxlib_jane  spawn  textutils  textutils_kernel
-    virtual_dom
+    async  base  bignum  bonsai  bonsai_term  bonsai_term_test  core
+    core_kernel  core_unix  notty_async  ppx_jane  ppxlib_jane  spawn
+    textutils  textutils_kernel  virtual_dom
 
-The rest of the 119-package Jane Street set is defined in
+The rest of the 141-package Jane Street set is defined in
 `../janestreet/0.18-oxcaml.nix` and is expected to work — it is the same set the
 upstream `oxcaml` branches ship — but only the packages above have actually been
 built here.
+
+Alongside the hand-curated names above, **736 further packages** were found by
+the triage harness in `maintainers/scripts/oxcaml`, which walks the scope
+leaves-first and records what builds. They are not enumerated here — the list
+lives in [`./supported.nix`](./supported.nix), which is the file the guard
+actually reads, so there is nothing for this document to drift out of sync with.
+Eighteen of them needed `doCheck = false`; the reason is on each entry in
+`./no-check.nix`.
+
+Because that set *is* one coherent upstream export, `oxcamlPackages.janeStreet`
+is left unguarded as a whole: `janeStreet.<pkg>` reaches all 141 without
+warning, while the lifted top-level names above are guarded like everything
+else. So `oxcamlPackages.incr_map` warns and `oxcamlPackages.janeStreet.incr_map`
+does not — the second spelling is the one that says "I know this is the
+unverified part of a set that ships together".
 
 ### End-to-end
 
@@ -167,13 +203,14 @@ path. Everything else comes from oxopam.
 
 ## Upstream state
 
-Checked 2026-08-14. **Nothing in the OxCaml ecosystem had moved since these pins
+Checked 2026-08-23. **Nothing in the OxCaml ecosystem had moved since these pins
 were taken**, so none of the patches above could be dropped as fixed upstream:
 
-* All 141 Jane Street pins in `../janestreet/0.18-oxcaml.nix` are still exactly
-  the head of their upstream `oxcaml` branch. Jane Street pushes these branches
-  as one batch export from its monorepo, so they move together or not at all;
-  the last export is still the 2026-07-10 one.
+* All 141 Jane Street pins in `../janestreet/0.18-oxcaml.nix` are unmoved: 140
+  are still exactly the head of their upstream `oxcaml` branch, and `spawn`,
+  which has none, is still at the v0.15.1 commit oxopam names. Jane Street
+  pushes these branches as one batch export from its monorepo, so they move
+  together or not at all; the last export is still the 2026-07-10 one.
 * oxopam's `main` is still the pinned commit (last commit 2026-07-31). Its other
   branches — `dev`, `unified`, `5.2.0minus38` — are all *older*, not newer.
 * `oxcaml/ocaml-lsp` still has only a `5.2.0minus-39` branch, at the pinned
@@ -182,7 +219,7 @@ were taken**, so none of the patches above could be dropped as fixed upstream:
 * nixpkgs master has no OxCaml packaging of its own, and none of the packages
   patched here have changed upstream since this branch was cut.
 
-The compiler has a newer **5.4.0-ox** line (`5.4.0-ox1` … `5.4.0-ox4`), but it is
+The compiler has a newer **5.4.0-ox** line (`5.4.0-ox1` … `5.4.0-ox5`), but it is
 not a candidate: oxopam's newest Jane Street package set is the
 `v0.18~preview.130.106+341` one pinned here, and every one of its opam files
 carries `conflicts: "oxcaml-compiler" {>= "5.4.0-ox1"}`. There is no Jane Street
@@ -210,3 +247,7 @@ variant of a package is installed in a switch.
    closure in each installed `dune-package`, so a missing propagation surfaces as
    `Error: Library "X" not found` in a *downstream* package.
 4. If you disable a test suite, say which test fails and why in a comment.
+5. Once it builds, add its attribute name to `./supported.nix` and to the
+   "Known to build" list above. Both, in the same commit: an entry in
+   `supported.nix` that the scope does not have fails evaluation, which is what
+   keeps that file from drifting into fiction.

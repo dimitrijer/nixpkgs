@@ -34,6 +34,14 @@ let
   inherit (oxOpam) patchesFor;
   patchSets = import ./patch-sets.nix;
 
+  # Packages OxCaml breaks -- built here, failed, and verified to build on a
+  # stock 5.2. Marked broken rather than left to warn: a warning says "nobody
+  # has tried this", and for these somebody has.
+  brokenByOxcaml = import ./broken.nix;
+
+  # Libraries that build but whose tests do not, with the reason for each.
+  noCheck = import ./no-check.nix;
+
   # The v0.18 Jane Street set, pinned to the upstream `oxcaml` branches. `self`
   # is the final scope so the module's `with self;` cross-references resolve.
   janeStreet = lib.recurseIntoAttrs (
@@ -793,3 +801,12 @@ in
 # into the scope. Re-applying it would be a no-op (`super` wins there), so the
 # v0.18 names are merged in here instead, where this overlay's layer wins.
 // janeStreet
+// lib.mapAttrs (name: _reason: prev.${name}.overrideAttrs { doCheck = false; }) noCheck
+// lib.mapAttrs (
+  name: failureClass:
+  prev.${name}.overrideAttrs (old: {
+    meta = (old.meta or { }) // {
+      broken = true;
+    };
+  })
+) brokenByOxcaml
